@@ -162,7 +162,8 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
   background: var(--bg);
   padding: 8px 6px; min-height: 72px;
 }
-.day-cell.is-today { background: #252520; }
+.day-cell.is-today { background: #2a2318; outline: 2px solid var(--accent); outline-offset: -2px; }
+.day-cell.is-today .dc-name { color: var(--accent); }
 
 .dc-name { font-size: 9px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
 .dc-date { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
@@ -882,7 +883,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 const WEEKS = [
   { w: 6, phase:"faza1", re:false, malta:false, start:"04.05.2026", days:["04.05","05.05","06.05","07.05","08.05","09.05","10.05"] },
   { w: 7, phase:"faza1", re:false, malta:false, start:"11.05.2026", days:["11.05","12.05","13.05","14.05","15.05","16.05","17.05"] },
-  { w: 8, phase:"faza1", re:true,  malta:false, start:"18.05.2026", days:["18.05","19.05","20.05","21.05","22.05","23.05","24.05"] },
+  { w: 8, phase:"faza1", re:false, malta:false, start:"18.05.2026", days:["18.05","19.05","20.05","21.05","22.05","23.05","24.05"], race10k:true },
   { w: 9, phase:"faza1", re:false, malta:false, start:"25.05.2026", days:["25.05","26.05","27.05","28.05","29.05","30.05","31.05"] },
   { w:10, phase:"faza2", re:false, malta:false, start:"01.06.2026", days:["01.06","02.06","03.06","04.06","05.06","06.06","07.06"] },
   { w:11, phase:"faza2", re:false, malta:false, start:"08.06.2026", days:["08.06","09.06","10.06","11.06","12.06","13.06","14.06"] },
@@ -917,7 +918,8 @@ const PHASES = [
 ];
 
 const DN = ['Pon','Wt','Śr','Czw','Pt','Sob','Nd'];
-const TODAY = '06.05';
+const _d = new Date();
+const TODAY = String(_d.getDate()).padStart(2,'0') + '.' + String(_d.getMonth()+1).padStart(2,'0');
 
 function getTask(w, di) {
   const wk = WEEKS.find(x => x.w === w);
@@ -932,8 +934,32 @@ function getTask(w, di) {
     return (m[w]||[])[di]||{cls:'tc-rest',txt:'—'};
   }
 
+  // Week 8 = Rossmann Run 10K (race week, not RE)
+  if (wk.race10k) {
+    const r10k = [
+      {cls:'tc-z2',   txt:"Z2 40'"},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-z2',   txt:"Z2 30'\n+4\xd7100m"},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-race', txt:'\uD83C\uDFC1 Rossmann\nRun 10K'},
+      {cls:'tc-rest', txt:'REST'}
+    ];
+    return r10k[di];
+  }
+
   if (re) {
-    return [[{cls:'tc-z2',txt:"Z2 35'"}],[w===8?{cls:'tc-rest',txt:'Wolne'}:{cls:'tc-fbw',txt:'FBW A ↓\n-20%'}],[{cls:'tc-z2',txt:"Z2 30'"}],[{cls:'tc-rest',txt:'Wolne'}],[w===8?{cls:'tc-rest',txt:'Wolne'}:{cls:'tc-z2',txt:"Z2 35'"}],[w===8?{cls:'tc-race',txt:'🏁 10K'}:{cls:'tc-long',txt:'Long '+(w===12?"60'":(w===17?'~10km':(w===21?'~12km':'~10km')))}],[{cls:'tc-rest',txt:'REST'}]][di];
+    const longRE = w===12 ? '60min' : (w===17 ? '~10km' : (w===21 ? '~12km' : '~10km'));
+    const reD = [
+      {cls:'tc-z2',   txt:'Z2 35min'},
+      {cls:'tc-fbw',  txt:'FBW A -20%'},
+      {cls:'tc-z2',   txt:'Z2 30min'},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-z2',   txt:'Z2 35min'},
+      {cls:'tc-long', txt:'Long ' + longRE},
+      {cls:'tc-rest', txt:'REST'}
+    ];
+    return reD[di];
   }
 
   if (di===0) {
@@ -975,7 +1001,7 @@ function getTask(w, di) {
     return {cls:'tc-rest', txt:'REST'};
   }
   if (di===5) {
-    if (phase==='faza1') { const lr={6:"Long 100'",7:"Long 110'",8:'🏁 10K',9:"Long 80'"}; return {cls:w===8?'tc-race':'tc-long', txt:lr[w]||"Long 60'"}; }
+    if (phase==='faza1') { const lr={6:"Long 100'",7:"Long 110'",9:"Long 80'"}; return {cls:'tc-long', txt:lr[w]||"Long 60'"}; }
     if (phase==='faza2') { const lr2={10:"Long 90'",11:"Long 100'",13:'~12km',14:'~13km',18:'~14km',19:'~15km',20:'~16km',22:'~17km',23:'~19km',24:'~20km'}; return {cls:'tc-long', txt:'Long '+(lr2[w]||'~12km')}; }
     if (phase==='taper') return {cls:'tc-long', txt:w===26?'Long 12km':'Long 8km'};
     if (phase==='recovery') return {cls:w===29?'tc-rest':'tc-long', txt:w===29?'Mobilność':(w===30?'~10km':'~14km')};
@@ -1012,6 +1038,7 @@ function buildCal() {
 
       let badge = '';
       if (isnow)           badge = `<span class="wk-badge" style="color:var(--accent);border-color:var(--accent)">★ teraz</span>`;
+      else if (wk.race10k)  badge = `<span class="wk-badge" style="color:var(--amber);border-color:var(--amber)">🏁 Rossmann</span>`;
       else if (wk.re)      badge = `<span class="wk-badge" style="color:var(--green);border-color:var(--green)">RE</span>`;
       else if (wk.malta)   badge = `<span class="wk-badge" style="color:var(--amber);border-color:var(--amber)">🌴 Malta</span>`;
       else if (wk.phase==='race') badge = `<span class="wk-badge" style="color:var(--amber);border-color:var(--amber)">🏁</span>`;
