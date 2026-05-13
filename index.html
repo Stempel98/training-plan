@@ -256,41 +256,6 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 }
 .stbtn.show { display: flex; }
 
-/* ── LINK EDITOR ── */
-.edit-btn {
-  position: fixed; bottom: 20px; left: 18px;
-  background: var(--bg2); color: var(--muted);
-  border: 1px solid var(--border); border-radius: 6px;
-  padding: 8px 14px; font-size: 12px; font-weight: 500;
-  cursor: pointer; z-index: 200;
-}
-.edit-btn:hover { background: var(--bg3); color: var(--text); }
-
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7); z-index: 300;
-  align-items: center; justify-content: center; padding: 16px;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 10px; width: 100%; max-width: 560px;
-  max-height: 85vh; overflow-y: auto; padding: 20px;
-}
-.modal h2 { font-size: 15px; color: var(--white); margin-bottom: 4px; border: none; margin-top: 0; padding: 0; }
-.modal p  { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
-.link-row { margin-bottom: 12px; }
-.link-row label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-.link-row input {
-  width: 100%; background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 5px; padding: 8px 10px; color: var(--text);
-  font-size: 12px; font-family: monospace;
-}
-.link-row input:focus { outline: none; border-color: var(--accent); }
-.modal-footer { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
-.btn-save { background: var(--accent); color: #fff; border: none; border-radius: 5px; padding: 8px 18px; font-size: 13px; font-weight: 500; cursor: pointer; }
-.btn-cancel { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); border-radius: 5px; padding: 8px 18px; font-size: 13px; cursor: pointer; }
-.link-section { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -370,7 +335,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Siedząc — stabilniej dla barku. Neutralny chwyt na starcie. <strong>Nie idź do pełnego wyprostu nad głową</strong> — zatrzymaj gdy łokcie lekko ugięte. Przerwa 90 sek.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/dumbbell-shoulder-press" target="_blank" data-ex="a2" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-press" target="_blank" data-ex="a2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+form" target="_blank">YouTube</a>
       </div>
     </div>
@@ -388,7 +353,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Kabel — stały opór przez cały zakres. <strong>Maksymalnie do poziomu barku, nie wyżej</strong> — masz zwężenie przestrzeni podbarkowej (MRI). Kciuk lekko w dół. Przerwa 60 sek.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/cable-lateral-raise" target="_blank" data-ex="a3" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/cable-low-single-arm-lateral-raise" target="_blank" data-ex="a3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+lateral+raise+form" target="_blank">YouTube</a>
       </div>
     </div>
@@ -424,7 +389,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Łokcie przy ciele przez cały ruch. Pełny wyprost na dole. Przerwa 60 sek.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/cable-pushdown" target="_blank" data-ex="a5" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/cable-rope-pushdown" target="_blank" data-ex="a5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+triceps+pushdown+rope+form" target="_blank">YouTube</a>
       </div>
     </div>
@@ -442,6 +407,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Kontroluj łokcie — nie rozchylaj. Przerwa 60 sek.</div>
       <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-tricep-extension" target="_blank" data-ex="a6" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=overhead+triceps+extension+dumbbell+form" target="_blank" data-ex="a6" data-type="yt">YouTube</a>
       </div>
     </div>
@@ -461,6 +427,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Leżenie na plecach. <strong>Lędźwie przy podłodze przez cały czas.</strong> Naprzemienne wyprosty nogi i przeciwnej ręki. Bezpieczne dla barku. Stabilizacja tułowia przekłada się bezpośrednio na ekonomikę biegu.</div>
       <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="a7" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="a7" data-type="yt">YouTube</a>
       </div>
     </div>
@@ -526,7 +493,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Do obojczyków, <strong>nie do szyi</strong>. Łopatki "do kieszeni" przy opuszczaniu. Na razie zamiast podciągania — bezpieczniej dla barku. Przerwa 90 sek.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/lat-pulldown" target="_blank" data-ex="b2" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/machine-pulldown" target="_blank" data-ex="b2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=lat+pulldown+proper+form" target="_blank">YouTube</a>
       </div>
     </div>
@@ -544,7 +511,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Ściskaj łopatki na końcu ruchu. Tułów nieruchomy. Romboid i dolny trapez to kluczowe stabilizatory łopatki po zwichnięciu. Przerwa 60 sek.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/seated-cable-row" target="_blank" data-ex="b3" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/machine-seated-cable-row" target="_blank" data-ex="b3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=seated+cable+row+form" target="_blank">YouTube</a>
       </div>
     </div>
@@ -618,6 +585,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Na krawędzi stopnia, pełny zakres góra-dół. Łydki amortyzują każdy krok — zaniedbane prowadzą do zapalenia ścięgna Achillesa. Przerwa 60 sek.</div>
       <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/calf-raise-1d-bilateral-from-box" target="_blank" data-ex="b7" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=standing+calf+raise+runners+form" target="_blank" data-ex="b7" data-type="yt">YouTube</a>
       </div>
     </div>
@@ -637,7 +605,8 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Identycznie jak A7. Lędźwie przy podłodze przez cały czas.</div>
       <div class="ex-links">
-        <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="a7" data-type="yt">YouTube</a>
+        <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="b8" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="b8" data-type="yt">YouTube</a>
       </div>
     </div>
   </div>
@@ -687,7 +656,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note"><strong>Najważniejsze ćwiczenie tego programu barku.</strong> Linki do uszu, łokcie wysoko. Końcowa pozycja = ręce jak "holdup". Aktywuje tylny deltoid, nadgrzebieniowy i rotatory zewnętrzne. Wykonuj powoli.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/cable-face-pull" target="_blank" data-ex="r2" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=face+pull+cable+shoulder+rehab" target="_blank">YouTube</a>
       </div>
     </div>
@@ -723,6 +692,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Plecy i ramiona przy ścianie. Unosisz ręce zachowując kontakt ze ścianą. Aktywuje zębaty przedni i dolny trapez — krytyczne stabilizatory łopatki. Bardzo wolno.</div>
       <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/wall-angels" target="_blank" data-ex="r4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=scapular+wall+slides+shoulder+rehab" target="_blank" data-ex="r4" data-type="yt">YouTube</a>
       </div>
     </div>
@@ -742,6 +712,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Leżenie przodem. Y = ręce 30° od głowy, T = poziomo. Max 1–2 kg. Focus na ściśnięciu łopatek, nie na ramionach.</div>
       <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/is-prone" target="_blank" data-ex="r5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=prone+YT+raise+scapula+trapezius+rehab" target="_blank" data-ex="r5" data-type="yt">YouTube</a>
       </div>
     </div>
@@ -776,7 +747,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
     <div class="ex-b">
       <div class="ex-note">Identycznie jak R2. Synchronizuje rotatory przed wiosłowaniem.</div>
       <div class="ex-links">
-        <a href="https://musclewiki.com/exercise/cable-face-pull" target="_blank" data-ex="r2" data-type="mw">MuscleWiki</a>
+        <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r7" data-type="mw">MuscleWiki</a>
       </div>
     </div>
   </div>
@@ -1120,122 +1091,7 @@ window.addEventListener('scroll',()=>{ document.getElementById('stbtn').classLis
 buildCal();
 </script>
 
-<!-- ── LINK EDITOR MODAL ── -->
-<button class="edit-btn" onclick="openLinkEditor()">✏️ Edytuj linki</button>
 
-<div class="modal-overlay" id="linkModal">
-  <div class="modal">
-    <h2>Edytuj linki do ćwiczeń</h2>
-    <p>Wklej link z MuscleWiki lub YouTube dla każdego ćwiczenia. Zapisane w przeglądarce.</p>
-    <div id="link-form"></div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeLinkEditor()">Anuluj</button>
-      <button class="btn-save" onclick="saveLinks()">Zapisz</button>
-    </div>
-  </div>
-</div>
-
-<script>
-const EXERCISES = [
-  { id:'a1', name:'A1 — Incline DB Press',        mw:'https://musclewiki.com/exercise/dumbbell-incline-bench-press', yt:'https://www.youtube.com/results?search_query=incline+dumbbell+press+form' },
-  { id:'a2', name:'A2 — Dumbbell OHP',             mw:'https://musclewiki.com/exercise/dumbbell-shoulder-press',       yt:'https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+form' },
-  { id:'a3', name:'A3 — Cable Lateral Raise',      mw:'https://musclewiki.com/exercise/cable-lateral-raise',           yt:'https://www.youtube.com/results?search_query=cable+lateral+raise+form' },
-  { id:'a4', name:'A4 — Flat DB Press',            mw:'https://musclewiki.com/exercise/dumbbell-bench-press',          yt:'https://www.youtube.com/results?search_query=dumbbell+flat+bench+press+form' },
-  { id:'a5', name:'A5 — Triceps Pushdown',         mw:'https://musclewiki.com/exercise/cable-pushdown',                yt:'https://www.youtube.com/results?search_query=cable+triceps+pushdown+rope+form' },
-  { id:'a6', name:'A6 — Overhead Triceps Ext.',    mw:'',                                                              yt:'https://www.youtube.com/results?search_query=overhead+triceps+extension+dumbbell+form' },
-  { id:'a7', name:'A7 — Dead Bug',                 mw:'',                                                              yt:'https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial' },
-  { id:'a8', name:'A8 — Band Pull-Apart',          mw:'https://musclewiki.com/exercise/band-pull-apart',               yt:'https://www.youtube.com/results?search_query=band+pull+apart+shoulder+health' },
-  { id:'b1', name:'B1 — Barbell Row',              mw:'https://musclewiki.com/exercise/barbell-bent-over-row',         yt:'https://www.youtube.com/results?search_query=barbell+bent+over+row+form' },
-  { id:'b2', name:'B2 — Lat Pulldown',             mw:'https://musclewiki.com/exercise/lat-pulldown',                  yt:'https://www.youtube.com/results?search_query=lat+pulldown+proper+form' },
-  { id:'b3', name:'B3 — Seated Cable Row',         mw:'https://musclewiki.com/exercise/seated-cable-row',              yt:'https://www.youtube.com/results?search_query=seated+cable+row+form' },
-  { id:'b4', name:'B4 — DB Curl + Hammer Curl',    mw:'https://musclewiki.com/exercise/dumbbell-curl',                 yt:'https://www.youtube.com/results?search_query=dumbbell+curl+hammer+curl+form' },
-  { id:'b5', name:'B5 — Goblet Squat',             mw:'https://musclewiki.com/exercise/dumbbell-goblet-squat',         yt:'https://www.youtube.com/results?search_query=goblet+squat+form' },
-  { id:'b6', name:'B6 — Romanian Deadlift',        mw:'https://musclewiki.com/exercise/dumbbell-romanian-deadlift',    yt:'https://www.youtube.com/results?search_query=romanian+deadlift+dumbbell+form' },
-  { id:'b7', name:'B7 — Calf Raise',               mw:'',                                                              yt:'https://www.youtube.com/results?search_query=standing+calf+raise+runners+form' },
-  { id:'b8', name:'B8 — Dead Bug',                 mw:'',                                                              yt:'https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial' },
-  { id:'r1', name:'R1 — Cable External Rotation',  mw:'https://musclewiki.com/exercise/cable-external-rotation',       yt:'https://www.youtube.com/results?search_query=cable+external+rotation+rotator+cuff+rehab' },
-  { id:'r2', name:'R2 — Cable Face Pull',          mw:'https://musclewiki.com/exercise/cable-face-pull',               yt:'https://www.youtube.com/results?search_query=face+pull+cable+shoulder+rehab' },
-  { id:'r3', name:'R3 — Cable Internal Rotation',  mw:'https://musclewiki.com/exercise/cable-internal-rotation',       yt:'https://www.youtube.com/results?search_query=cable+internal+rotation+shoulder+rehab' },
-  { id:'r4', name:'R4 — Scapular Wall Slides',     mw:'',                                                              yt:'https://www.youtube.com/results?search_query=scapular+wall+slides+shoulder+rehab' },
-  { id:'r5', name:'R5 — Prone YT Raise',           mw:'',                                                              yt:'https://www.youtube.com/results?search_query=prone+YT+raise+scapula+trapezius+rehab' },
-  { id:'r6', name:'R6 — Sleeper Stretch',          mw:'',                                                              yt:'https://www.youtube.com/results?search_query=sleeper+stretch+posterior+shoulder+capsule' },
-  { id:'r7', name:'R7 — Face Pull aktywacja',      mw:'https://musclewiki.com/exercise/cable-face-pull',               yt:'' },
-];
-
-const SECTIONS = [
-  { label:'FBW A — Push', ids:['a1','a2','a3','a4','a5','a6','a7','a8'] },
-  { label:'FBW B — Pull + Nogi', ids:['b1','b2','b3','b4','b5','b6','b7','b8'] },
-  { label:'Bark Rehab', ids:['r1','r2','r3','r4','r5','r6','r7'] },
-];
-
-function getLinks() {
-  try { return JSON.parse(localStorage.getItem('ex_links') || '{}'); } catch(e) { return {}; }
-}
-
-function openLinkEditor() {
-  const saved = getLinks();
-  const form = document.getElementById('link-form');
-  form.innerHTML = '';
-  SECTIONS.forEach(sec => {
-    const secEl = document.createElement('div');
-    secEl.className = 'link-section';
-    secEl.textContent = sec.label;
-    form.appendChild(secEl);
-    sec.ids.forEach(id => {
-      const ex = EXERCISES.find(e => e.id === id);
-      if (!ex) return;
-      const mwVal = saved[id+'_mw'] !== undefined ? saved[id+'_mw'] : ex.mw;
-      const ytVal = saved[id+'_yt'] !== undefined ? saved[id+'_yt'] : ex.yt;
-      const row = document.createElement('div');
-      row.className = 'link-row';
-      row.innerHTML = '<label>' + ex.name + '</label>' +
-        '<input type="url" id="mw_' + id + '" placeholder="MuscleWiki URL" value="' + mwVal.replace(/"/g,"&quot;") + '">' +
-        '<input type="url" id="yt_' + id + '" placeholder="YouTube URL" value="' + ytVal.replace(/"/g,"&quot;") + '" style="margin-top:4px">';
-      form.appendChild(row);
-    });
-  });
-  document.getElementById('linkModal').classList.add('open');
-}
-
-function closeLinkEditor() {
-  document.getElementById('linkModal').classList.remove('open');
-}
-
-function saveLinks() {
-  const saved = {};
-  EXERCISES.forEach(ex => {
-    const mwEl = document.getElementById('mw_' + ex.id);
-    const ytEl = document.getElementById('yt_' + ex.id);
-    if (mwEl) saved[ex.id + '_mw'] = mwEl.value;
-    if (ytEl) saved[ex.id + '_yt'] = ytEl.value;
-  });
-  localStorage.setItem('ex_links', JSON.stringify(saved));
-  applyLinks();
-  closeLinkEditor();
-}
-
-function applyLinks() {
-  const saved = getLinks();
-  EXERCISES.forEach(ex => {
-    const mw = saved[ex.id+'_mw'] !== undefined ? saved[ex.id+'_mw'] : ex.mw;
-    const yt = saved[ex.id+'_yt'] !== undefined ? saved[ex.id+'_yt'] : ex.yt;
-    // Find all links in exercise cards by data-id
-    const mwLink = document.querySelector('[data-ex="'+ex.id+'"][data-type="mw"]');
-    const ytLink = document.querySelector('[data-ex="'+ex.id+'"][data-type="yt"]');
-    if (mwLink) { mwLink.href = mw; mwLink.style.display = mw ? '' : 'none'; }
-    if (ytLink) { ytLink.href = yt; ytLink.style.display = yt ? '' : 'none'; }
-  });
-}
-
-// Close modal on overlay click
-document.getElementById('linkModal').addEventListener('click', function(e) {
-  if (e.target === this) closeLinkEditor();
-});
-
-// Apply saved links on load
-document.addEventListener('DOMContentLoaded', applyLinks);
-setTimeout(applyLinks, 100);
-</script>
 
 </body>
 </html>
