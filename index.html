@@ -357,6 +357,7 @@ body.editor-mode .editor-only { display: flex !important; }
   <button onclick="TAB('bark')">Bark Rehab</button>
   <button onclick="TAB('zasady')">Zasady</button>
   <button onclick="TAB('supp')">Suplementy</button>
+  <button onclick="TAB('dziennik')">📈 Dziennik</button>
 </div>
 
 <!-- ══════════ KALENDARZ ══════════ -->
@@ -1211,6 +1212,17 @@ buildCal();
 const SB_URL = 'https://cxrkmiejbrepmtqjdmww.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4cmttaWVqYnJlcG10cWpkbXd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjE0NDcsImV4cCI6MjA5NDc5NzQ0N30.tz-RN9Hn4DSqFF7xe7vH0gCPKpb7doLedyFrB_PjLv0';
 
+const EX_NAMES = {
+  a1:'Incline DB Press', a2:'Dumbbell OHP', a3:'Cable Lateral Raise',
+  a4:'Flat DB Press', a5:'Triceps Pushdown', a6:'Overhead Triceps Ext.',
+  a7:'Dead Bug (A)', a8:'Band Pull-Apart',
+  b1:'Barbell Row', b2:'Lat Pulldown', b3:'Seated Cable Row',
+  b4:'DB Curl + Hammer', b5:'Goblet Squat', b6:'Romanian Deadlift',
+  b7:'Calf Raise', b8:'Dead Bug (B)',
+  r1:'External Rotation', r2:'Face Pull', r3:'Internal Rotation',
+  r4:'Wall Slides', r5:'YT Raise', r6:'Sleeper Stretch', r7:'Face Pull (aktywacja)'
+};
+
 async function sbFetch(path, opts) {
   opts = opts || {};
   const res = await fetch(SB_URL + '/rest/v1/' + path, {
@@ -1223,8 +1235,14 @@ async function sbFetch(path, opts) {
     },
     body: opts.body || undefined
   });
-  if (res.status === 204) return null;
+  if (res.status === 204 || res.status === 201) return null;
+  if (!res.ok) { const t = await res.text(); throw new Error(t); }
   return res.json();
+}
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
 async function saveWeight(exId) {
@@ -1234,22 +1252,50 @@ async function saveWeight(exId) {
   const weight = wEl ? (parseFloat(wEl.value) || null) : null;
   const reps   = rEl ? (parseInt(rEl.value)   || null) : null;
   if (!weight && !reps) return;
+
   btn.textContent = '...';
+  btn.disabled = true;
+
   try {
-    await sbFetch('workout_logs', {
-      method: 'POST',
-      prefer: 'return=minimal',
-      body: JSON.stringify({ exercise_id: exId, weight_kg: weight, reps: reps, sets: 1 })
-    });
+    // Check if entry exists for today
+    const today = todayStr();
+    const existing = await sbFetch(
+      'workout_logs?exercise_id=eq.' + exId +
+      '&logged_at=gte.' + today + 'T00:00:00' +
+      '&logged_at=lte.' + today + 'T23:59:59'
+    );
+
+    if (existing && existing.length > 0) {
+      // Update existing
+      await sbFetch('workout_logs?id=eq.' + existing[0].id, {
+        method: 'PATCH',
+        prefer: 'return=minimal',
+        body: JSON.stringify({ weight_kg: weight, reps: reps })
+      });
+    } else {
+      // Insert new
+      await sbFetch('workout_logs', {
+        method: 'POST',
+        prefer: 'return=minimal',
+        body: JSON.stringify({ exercise_id: exId, weight_kg: weight, reps: reps, sets: 1 })
+      });
+    }
+
     btn.textContent = '✓ Zapisano';
     btn.classList.add('saved');
     if (wEl) wEl.value = '';
     if (rEl) rEl.value = '';
-    setTimeout(() => { btn.textContent = 'Zapisz'; btn.classList.remove('saved'); }, 2000);
+    setTimeout(() => { btn.textContent = 'Zapisz'; btn.classList.remove('saved'); btn.disabled = false; }, 2000);
     loadHistory(exId);
   } catch(e) {
-    btn.textContent = 'Błąd';
-    setTimeout(() => { btn.textContent = 'Zapisz'; }, 2000);
+    console.error(e);
+    btn.textContent = 'Błąd: ' + (e.message || 'sprawdź konsolę');
+    btn.style.background = 'var(--red)';
+    setTimeout(() => {
+      btn.textContent = 'Zapisz';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
   }
 }
 
@@ -1264,12 +1310,10 @@ async function loadHistory(exId) {
       el.innerHTML = '<span style="color:var(--faint)">brak historii</span>';
       return;
     }
-    // Pre-fill inputs with last values
-    const last = data[0];
     const wEl = document.getElementById('wi-' + exId);
     const rEl = document.getElementById('ri-' + exId);
-    if (wEl && last.weight_kg) wEl.placeholder = last.weight_kg + ' kg';
-    if (rEl && last.reps)      rEl.placeholder = last.reps + ' powt.';
+    if (wEl && data[0].weight_kg) wEl.placeholder = data[0].weight_kg + ' kg';
+    if (rEl && data[0].reps)      rEl.placeholder = data[0].reps + ' powt.';
 
     el.innerHTML = data.map(function(r) {
       const d = new Date(r.logged_at);
@@ -1284,13 +1328,201 @@ async function loadHistory(exId) {
   }
 }
 
+// ── DZIENNIK ──────────────────────────────────────────────────────────────────
+
+let _allLogs = null;
+let _chartInstance = null;
+
+async function loadDziennik() {
+  const loading = document.getElementById('dz-loading');
+  const progress = document.getElementById('dz-progress');
+  if (!loading) return;
+
+  try {
+    const data = await sbFetch('workout_logs?order=logged_at.desc&limit=500');
+    _allLogs = data || [];
+
+    loading.style.display = 'none';
+    progress.style.display = 'block';
+
+    // Populate exercise select (only those with data)
+    const exWithData = [...new Set(_allLogs.map(r => r.exercise_id))];
+    const sel = document.getElementById('dz-ex-select');
+    sel.innerHTML = exWithData.map(id =>
+      '<option value="' + id + '">' + (EX_NAMES[id] || id) + '</option>'
+    ).join('');
+
+    renderChart();
+    renderHistory();
+  } catch(e) {
+    loading.textContent = 'Błąd ładowania: ' + e.message;
+  }
+}
+
+function renderChart() {
+  const sel = document.getElementById('dz-ex-select');
+  if (!sel || !_allLogs) return;
+  const exId = sel.value;
+  const logs = _allLogs
+    .filter(r => r.exercise_id === exId && r.weight_kg)
+    .reverse();
+
+  const canvas = document.getElementById('dz-chart');
+  const empty = document.getElementById('dz-chart-empty');
+
+  if (logs.length === 0) {
+    canvas.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  canvas.style.display = 'block';
+  empty.style.display = 'none';
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth - 28;
+  canvas.width = W;
+  canvas.height = 180;
+
+  const weights = logs.map(r => r.weight_kg);
+  const dates = logs.map(r => {
+    const d = new Date(r.logged_at);
+    return d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0');
+  });
+
+  const minW = Math.min(...weights) * 0.9;
+  const maxW = Math.max(...weights) * 1.1;
+  const pad = { top: 20, right: 16, bottom: 36, left: 36 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = 180 - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, W, 180);
+
+  // Grid lines
+  ctx.strokeStyle = '#3a3a44';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (chartH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    const val = maxW - ((maxW - minW) / 4) * i;
+    ctx.fillStyle = '#54525a';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(val.toFixed(1), pad.left - 4, y + 3);
+  }
+
+  if (logs.length < 2) {
+    // Single point
+    const x = pad.left + chartW / 2;
+    const y = pad.top + chartH / 2;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#e07b54';
+    ctx.fill();
+  } else {
+    const xStep = chartW / (logs.length - 1);
+
+    // Gradient fill
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+    grad.addColorStop(0, 'rgba(224,123,84,0.3)');
+    grad.addColorStop(1, 'rgba(224,123,84,0.02)');
+
+    ctx.beginPath();
+    logs.forEach((r, i) => {
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - ((r.weight_kg - minW) / (maxW - minW)) * chartH;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    // Close fill path
+    ctx.lineTo(pad.left + (logs.length-1) * xStep, pad.top + chartH);
+    ctx.lineTo(pad.left, pad.top + chartH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = '#e07b54';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    logs.forEach((r, i) => {
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - ((r.weight_kg - minW) / (maxW - minW)) * chartH;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Dots + labels
+    logs.forEach((r, i) => {
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - ((r.weight_kg - minW) / (maxW - minW)) * chartH;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#e07b54';
+      ctx.fill();
+      ctx.strokeStyle = '#26262c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Weight label above dot
+      ctx.fillStyle = '#e0ddd8';
+      ctx.font = 'bold 10px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(r.weight_kg + 'kg', x, y - 8);
+
+      // Date label below
+      ctx.fillStyle = '#54525a';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillText(dates[i], x, pad.top + chartH + 14);
+    });
+  }
+}
+
+function renderHistory() {
+  const el = document.getElementById('dz-history');
+  if (!el || !_allLogs) return;
+
+  // Group by date
+  const byDate = {};
+  _allLogs.forEach(r => {
+    const d = new Date(r.logged_at);
+    const key = d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
+    if (!byDate[key]) byDate[key] = [];
+    byDate[key].push(r);
+  });
+
+  el.innerHTML = Object.entries(byDate).map(([date, logs]) => {
+    const rows = logs.map(r => {
+      const parts = [];
+      if (r.weight_kg) parts.push('<strong style="color:var(--green)">' + r.weight_kg + 'kg</strong>');
+      if (r.reps) parts.push(r.reps + ' powt.');
+      return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bg3)">' +
+        '<span style="color:var(--text)">' + (EX_NAMES[r.exercise_id] || r.exercise_id) + '</span>' +
+        '<span style="color:var(--muted)">' + parts.join(' · ') + '</span>' +
+        '</div>';
+    }).join('');
+
+    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:10px">' +
+      '<div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">' + date + '</div>' +
+      rows + '</div>';
+  }).join('');
+}
+
+// Load dziennik when tab opens
+const _origTAB = window.TAB;
+window.TAB = function(id) {
+  _origTAB(id);
+  if (id === 'dziennik') loadDziennik();
+};
+
 // Load history when exercise card opens
 const _TOG = window.TOG;
 window.TOG = function(el) {
   _TOG(el);
   if (el.classList.contains('open')) {
     el.querySelectorAll('.weight-history').forEach(function(h) {
-      loadHistory(h.id.replace('wh-', ''));
+      loadHistory(h.id.replace('wh-',''));
     });
   }
 };
@@ -1383,6 +1615,36 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closePw();
 });
 </script>
+
+
+<!-- ══════════ DZIENNIK ══════════ -->
+<div id="tab-dziennik" class="section">
+  <h1>Dziennik treningowy</h1>
+  <p>Historia wszystkich zapisanych ciężarów i progresja.</p>
+
+  <div id="dz-loading" style="color:var(--muted);font-size:13px;padding:20px 0">Ładowanie...</div>
+
+  <!-- Progresja -->
+  <div id="dz-progress" style="display:none">
+    <h2>Progresja ciężarów</h2>
+    <div style="margin-bottom:12px">
+      <select id="dz-ex-select" onchange="renderChart()"
+        style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+               padding:8px 12px;color:var(--text);font-size:13px;width:100%">
+      </select>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:20px">
+      <canvas id="dz-chart" height="180"></canvas>
+      <div id="dz-chart-empty" style="display:none;text-align:center;color:var(--faint);font-size:13px;padding:40px 0">
+        Brak danych dla tego ćwiczenia
+      </div>
+    </div>
+
+    <!-- Historia po datach -->
+    <h2>Historia sesji</h2>
+    <div id="dz-history"></div>
+  </div>
+</div>
 
 </body>
 </html>
