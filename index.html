@@ -308,6 +308,1656 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 }
 .editor-only { display: none !important; }
 body.editor-mode .editor-only { display: flex !important; }
+body.editor-mode .nav .editor-only { display: inline-block !important; }
+
+/* Password modal */
+.pw-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); z-index: 400;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.pw-overlay.open { display: flex; }
+.pw-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px; width: 100%; max-width: 320px;
+  text-align: center;
+}
+.pw-box h3 { font-size: 15px; color: var(--white); margin-bottom: 6px; }
+.pw-box p  { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.pw-input {
+  width: 100%; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 10px 12px; color: var(--white);
+  font-size: 15px; text-align: center; letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+.pw-input:focus { outline: none; border-color: var(--accent); }
+.pw-input.error { border-color: var(--red); animation: shake 0.3s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.pw-submit {
+  width: 100%; background: var(--accent); color: #fff;
+  border: none; border-radius: 6px; padding: 10px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+}
+.pw-submit:active { opacity: 0.8; }
+.pw-cancel { margin-top: 8px; font-size: 12px; color: var(--faint); cursor: pointer; display: block; }
+.pw-cancel:hover { color: var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="active" onclick="TAB('kal')">Kalendarz</button>
+  <button onclick="TAB('fbwa')">FBW A</button>
+  <button onclick="TAB('fbwb')">FBW B</button>
+  <button onclick="TAB('bark')">Bark Rehab</button>
+  <button onclick="TAB('zasady')">Zasady</button>
+  <button onclick="TAB('supp')">Suplementy</button>
+  <button onclick="TAB('dziennik')" class="editor-only" style="display:none">📈 Dziennik</button>
+</div>
+
+<!-- ══════════ KALENDARZ ══════════ -->
+<div id="tab-kal" class="section active">
+  <h1>Plan Treningowy 2026</h1>
+  <p>Cracovia Półmaraton · <strong style="color:var(--white)">11.10.2026</strong> · Aktualnie Tydzień 6</p>
+
+  <div class="stats">
+    <div class="stat"><strong>198</strong><span>HRmax</span></div>
+    <div class="stat"><strong>≤160</strong><span>Z2 bpm</span></div>
+    <div class="stat"><strong>1:21</strong><span>PB 10K</span></div>
+    <div class="stat"><strong>35:25</strong><span>PB 5K</span></div>
+  </div>
+
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:var(--blue)"></span>Z2 bieg</span>
+    <span class="leg"><span class="dot" style="background:var(--amber)"></span>Tempo Z3</span>
+    <span class="leg"><span class="dot" style="background:var(--accent)"></span>Interwały Z4</span>
+    <span class="leg"><span class="dot" style="background:var(--accent)"></span>Long Run</span>
+    <span class="leg"><span class="dot" style="background:var(--green)"></span>FBW Siła</span>
+    <span class="leg"><span class="dot" style="background:var(--green)"></span>Tyg. RE</span>
+    <span class="leg"><span class="dot" style="background:var(--amber)"></span>🌴 Malta</span>
+  </div>
+
+  <div id="cal-root"></div>
+</div>
+
+<!-- ══════════ FBW A ══════════ -->
+<div id="tab-fbwa" class="section">
+  <h1>FBW A — Push</h1>
+  <p>Wtorek · 65–75 min · Klatka, deltoid, triceps, core</p>
+
+  <div class="box box-amber">
+    <strong>Zawsze najpierw Bark Rehab A</strong> — 10–15 min aktywacji rotatorów przed jakimkolwiek wyciskaniem. Zakładka Bark Rehab.
+  </div>
+
+  <h3>Blok Push</h3>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A1</span>
+      <div class="ex-info">
+        <div class="ex-name">Incline Dumbbell Press</div>
+        <div class="ex-tags"><span class="tag">Klatka górna</span><span class="tag">Deltoid przedni</span></div>
+      </div>
+      <span class="ex-sets">4 × 8–10</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Skos <strong>+30°</strong> — nie 45°. Hantle zamiast sztangi. Łokcie <strong>45–75° od tułowia</strong>. <strong>Zatrzymaj 10° przed pełnym wyprostem</strong> — przy hipermobilności staw nie hamuje sam. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-incline-bench-press" target="_blank" data-ex="a1" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=incline+dumbbell+press+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a1')">Zapisz</button><div class="weight-history" id="wh-a1"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A2</span>
+      <div class="ex-info">
+        <div class="ex-name">Dumbbell OHP (siedząc)</div>
+        <div class="ex-tags"><span class="tag">Deltoid</span><span class="tag rehab">⚠ kontroluj zakres</span></div>
+      </div>
+      <span class="ex-sets">3 × 10–12</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Siedząc — stabilniej dla barku. Neutralny chwyt na starcie. <strong>Nie idź do pełnego wyprostu nad głową</strong> — zatrzymaj gdy łokcie lekko ugięte. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-press" target="_blank" data-ex="a2" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a2')">Zapisz</button><div class="weight-history" id="wh-a2"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A3</span>
+      <div class="ex-info">
+        <div class="ex-name">Cable Lateral Raise</div>
+        <div class="ex-tags"><span class="tag">Deltoid boczny</span></div>
+      </div>
+      <span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Kabel — stały opór przez cały zakres. <strong>Maksymalnie do poziomu barku, nie wyżej</strong> — masz zwężenie przestrzeni podbarkowej (MRI). Kciuk lekko w dół. Przerwa 60 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/cable-low-single-arm-lateral-raise" target="_blank" data-ex="a3" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=cable+lateral+raise+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a3')">Zapisz</button><div class="weight-history" id="wh-a3"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A4</span>
+      <div class="ex-info">
+        <div class="ex-name">Flat Dumbbell Press</div>
+        <div class="ex-tags"><span class="tag">Klatka</span><span class="tag">Triceps</span></div>
+      </div>
+      <span class="ex-sets">3 × 10</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Hantle. Łokcie 45–75°. Opuszczanie 2–3 sek. Nie przekraczaj linii tułowia w dolnej pozycji. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-bench-press" target="_blank" data-ex="a4" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=dumbbell+flat+bench+press+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a4')">Zapisz</button><div class="weight-history" id="wh-a4"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A5</span>
+      <div class="ex-info">
+        <div class="ex-name">Triceps Pushdown (lina)</div>
+        <div class="ex-tags"><span class="tag">Triceps</span></div>
+      </div>
+      <span class="ex-sets">3 × 12</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Łokcie przy ciele przez cały ruch. Pełny wyprost na dole. Przerwa 60 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/cable-rope-pushdown" target="_blank" data-ex="a5" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=cable+triceps+pushdown+rope+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a5')">Zapisz</button><div class="weight-history" id="wh-a5"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A6</span>
+      <div class="ex-info">
+        <div class="ex-name">Overhead Triceps Extension</div>
+        <div class="ex-tags"><span class="tag">Triceps — długi łob</span></div>
+      </div>
+      <span class="ex-sets">2 × 12</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Kontroluj łokcie — nie rozchylaj. Przerwa 60 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-tricep-extension" target="_blank" data-ex="a6" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=overhead+triceps+extension+dumbbell+form" target="_blank" data-ex="a6" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a6')">Zapisz</button><div class="weight-history" id="wh-a6"></div></div>
+    </div>
+  </div>
+
+  <h3>Zamknięcie</h3>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A7</span>
+      <div class="ex-info">
+        <div class="ex-name">Dead Bug</div>
+        <div class="ex-tags"><span class="tag">Core</span></div>
+      </div>
+      <span class="ex-sets">3 × 10</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Leżenie na plecach. <strong>Lędźwie przy podłodze przez cały czas.</strong> Naprzemienne wyprosty nogi i przeciwnej ręki. Bezpieczne dla barku. Stabilizacja tułowia przekłada się bezpośrednio na ekonomikę biegu.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="a7" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="a7" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-a7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a7')">Zapisz</button><div class="weight-history" id="wh-a7"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">A8</span>
+      <div class="ex-info">
+        <div class="ex-name">Band Pull-Apart</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab</span><span class="tag">Tylny deltoid</span></div>
+      </div>
+      <span class="ex-sets">3 × 20</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Guma przed klatką, rozciągaj do pełnego wyprostu. <strong>Obowiązkowe zamknięcie każdego treningu push</strong> — równoważy klatkę i chroni bark przed przodopochyleniem.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/band-pull-apart" target="_blank" data-ex="a8" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=band+pull+apart+shoulder+health" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-a8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a8')">Zapisz</button><div class="weight-history" id="wh-a8"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FBW B ══════════ -->
+<div id="tab-fbwb" class="section">
+  <h1>FBW B — Pull + Nogi</h1>
+  <p>Czwartek · 65–75 min · Plecy, biceps, nogi, core</p>
+
+  <div class="box box-amber">
+    <strong>Zawsze najpierw Bark Rehab B</strong> — Sleeper stretch + Face pull + YT raise przed wiosłowaniem.
+  </div>
+
+  <h3>Blok Pull</h3>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B1</span>
+      <div class="ex-info">
+        <div class="ex-name">Barbell Bent Over Row</div>
+        <div class="ex-tags"><span class="tag">Plecy</span><span class="tag">Stabilizacja barku</span></div>
+      </div>
+      <span class="ex-sets">4 × 8</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Tułów <strong>45°</strong>, bar do pępka. Łopatki ściskaj na końcu każdego powt. Opuszczanie 2–3 sek. Silne plecy to stabilny bark. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/barbell-bent-over-row" target="_blank" data-ex="b1" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=barbell+bent+over+row+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b1')">Zapisz</button><div class="weight-history" id="wh-b1"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B2</span>
+      <div class="ex-info">
+        <div class="ex-name">Lat Pulldown (szeroki)</div>
+        <div class="ex-tags"><span class="tag">Latissimus</span></div>
+      </div>
+      <span class="ex-sets">3 × 10–12</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Do obojczyków, <strong>nie do szyi</strong>. Łopatki "do kieszeni" przy opuszczaniu. Na razie zamiast podciągania — bezpieczniej dla barku. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/machine-pulldown" target="_blank" data-ex="b2" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=lat+pulldown+proper+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b2')">Zapisz</button><div class="weight-history" id="wh-b2"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B3</span>
+      <div class="ex-info">
+        <div class="ex-name">Seated Cable Row (wąski)</div>
+        <div class="ex-tags"><span class="tag">Romboid</span><span class="tag">Dolny trapez</span></div>
+      </div>
+      <span class="ex-sets">3 × 12</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Ściskaj łopatki na końcu ruchu. Tułów nieruchomy. Romboid i dolny trapez to kluczowe stabilizatory łopatki po zwichnięciu. Przerwa 60 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/machine-seated-cable-row" target="_blank" data-ex="b3" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=seated+cable+row+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b3')">Zapisz</button><div class="weight-history" id="wh-b3"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B4</span>
+      <div class="ex-info">
+        <div class="ex-name">DB Curl + Hammer Curl</div>
+        <div class="ex-tags"><span class="tag">Biceps</span></div>
+      </div>
+      <span class="ex-sets">3 × 12 każde</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">DB curl — supinacja w górze. Hammer curl — neutralny chwyt, angażuje brachialis. Biceps stabilizuje bark przy ruchach pull. Przerwa 60 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-curl" target="_blank" data-ex="b4" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=dumbbell+curl+hammer+curl+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b4')">Zapisz</button><div class="weight-history" id="wh-b4"></div></div>
+    </div>
+  </div>
+
+  <h3>Blok Nogi</h3>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B5</span>
+      <div class="ex-info">
+        <div class="ex-name">Goblet Squat</div>
+        <div class="ex-tags"><span class="tag">Quady</span><span class="tag">Core</span></div>
+      </div>
+      <span class="ex-sets">3 × 12</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Jedna hantla przy klatce. Kolana nad palcami, plecy proste. Bezpieczny dla barku. Alternatywa: Leg Press. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-goblet-squat" target="_blank" data-ex="b5" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=goblet+squat+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b5')">Zapisz</button><div class="weight-history" id="wh-b5"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B6</span>
+      <div class="ex-info">
+        <div class="ex-name">Romanian Deadlift (hantle)</div>
+        <div class="ex-tags"><span class="tag">Hamstring</span><span class="tag">Pośladki</span></div>
+      </div>
+      <span class="ex-sets">3 × 10</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Hantle wzdłuż nóg. <strong>Hip hinge</strong> — biodra cofają się do tyłu, plecy proste. Poczuj rozciągnięcie w udzie na dole. Hamstring i pośladki to motor napędowy biegacza. Przerwa 90 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dumbbell-romanian-deadlift" target="_blank" data-ex="b6" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=romanian+deadlift+dumbbell+form" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b6')">Zapisz</button><div class="weight-history" id="wh-b6"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B7</span>
+      <div class="ex-info">
+        <div class="ex-name">Calf Raise (stojąc)</div>
+        <div class="ex-tags"><span class="tag">Łydki</span></div>
+      </div>
+      <span class="ex-sets">3 × 15–20</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Na krawędzi stopnia, pełny zakres góra-dół. Łydki amortyzują każdy krok — zaniedbane prowadzą do zapalenia ścięgna Achillesa. Przerwa 60 sek.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/calf-raise-1d-bilateral-from-box" target="_blank" data-ex="b7" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=standing+calf+raise+runners+form" target="_blank" data-ex="b7" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-b7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b7')">Zapisz</button><div class="weight-history" id="wh-b7"></div></div>
+    </div>
+  </div>
+
+  <h3>Zamknięcie</h3>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">B8</span>
+      <div class="ex-info">
+        <div class="ex-name">Dead Bug</div>
+        <div class="ex-tags"><span class="tag">Core</span></div>
+      </div>
+      <span class="ex-sets">3 × 10</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Identycznie jak A7. Lędźwie przy podłodze przez cały czas.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="b8" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="b8" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-b8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b8')">Zapisz</button><div class="weight-history" id="wh-b8"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ BARK REHAB ══════════ -->
+<div id="tab-bark" class="section">
+  <h1>Bark Rehab</h1>
+  <p>Wykonuj na początku każdego treningu siłowego — 10–15 min.</p>
+
+  <div class="box box-red">
+    <strong>MRI 13.02.2026:</strong> Częściowe uszkodzenie przyczepu obrąbka (przód + tył) + zwężenie przestrzeni podbarkowej 6mm. Rotatory bez uszkodzeń. Ten blok zastępuje pasywną stabilizację obrąbka aktywną mięśniową.
+  </div>
+  <div class="box box-amber">
+    <strong>Tick/spięcie prawej ręki:</strong> Wspomnij ortopedzie na wizycie 24/27.05. Obserwuj czy nasila się przy obciążeniu.
+  </div>
+
+  <h2>Blok A — przed FBW A</h2>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R1</span>
+      <div class="ex-info">
+        <div class="ex-name">Cable External Rotation</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab core</span><span class="tag">Podgrzebieniowy</span></div>
+      </div>
+      <span class="ex-sets">3 × 15 (obie)</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Łokieć 90° przy tułowiu, rotuj na zewnątrz. <strong>Nie do maksymalnego zakresu</strong> — hipermobilność. Powolny powrót. Prawa strona może być słabsza po zwichnięciu — to normalne.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/cable-external-rotation" target="_blank" data-ex="r1" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=cable+external+rotation+rotator+cuff+rehab" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r1')">Zapisz</button><div class="weight-history" id="wh-r1"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R2</span>
+      <div class="ex-info">
+        <div class="ex-name">Cable Face Pull</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab core</span><span class="tag">Tylny deltoid</span></div>
+      </div>
+      <span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note"><strong>Najważniejsze ćwiczenie tego programu barku.</strong> Linki do uszu, łokcie wysoko. Końcowa pozycja = ręce jak "holdup". Aktywuje tylny deltoid, nadgrzebieniowy i rotatory zewnętrzne. Wykonuj powoli.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r2" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=face+pull+cable+shoulder+rehab" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r2')">Zapisz</button><div class="weight-history" id="wh-r2"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R3</span>
+      <div class="ex-info">
+        <div class="ex-name">Cable Internal Rotation</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab</span><span class="tag">Podłopatkowy</span></div>
+      </div>
+      <span class="ex-sets">2 × 15 (prawa)</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Rotacja do wewnątrz — przedramię idzie w stronę brzucha. Nie do max zakresu. Głównie prawa ręka dla symetrii rotatorów.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/cable-internal-rotation" target="_blank" data-ex="r3" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=cable+internal+rotation+shoulder+rehab" target="_blank">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r3')">Zapisz</button><div class="weight-history" id="wh-r3"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R4</span>
+      <div class="ex-info">
+        <div class="ex-name">Scapular Wall Slides</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab</span><span class="tag">Zębaty przedni</span></div>
+      </div>
+      <span class="ex-sets">2 × 10</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Plecy i ramiona przy ścianie. Unosisz ręce zachowując kontakt ze ścianą. Aktywuje zębaty przedni i dolny trapez — krytyczne stabilizatory łopatki. Bardzo wolno.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/wall-angels" target="_blank" data-ex="r4" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=scapular+wall+slides+shoulder+rehab" target="_blank" data-ex="r4" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-r4" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r4')">Zapisz</button><div class="weight-history" id="wh-r4"></div></div>
+    </div>
+  </div>
+
+  <h2>Blok B — przed FBW B</h2>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R5</span>
+      <div class="ex-info">
+        <div class="ex-name">Prone YT Raise</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab</span><span class="tag">Trapez środkowy</span></div>
+      </div>
+      <span class="ex-sets">2 × 10 (Y i T)</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Leżenie przodem. Y = ręce 30° od głowy, T = poziomo. Max 1–2 kg. Focus na ściśnięciu łopatek, nie na ramionach.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/is-prone" target="_blank" data-ex="r5" data-type="mw">MuscleWiki</a>
+        <a href="https://www.youtube.com/results?search_query=prone+YT+raise+scapula+trapezius+rehab" target="_blank" data-ex="r5" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-r5" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r5')">Zapisz</button><div class="weight-history" id="wh-r5"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R6</span>
+      <div class="ex-info">
+        <div class="ex-name">Sleeper Stretch</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab stretch</span></div>
+      </div>
+      <span class="ex-sets">2 × 30 sek (prawa)</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Na prawym boku, prawe ramię wyciągnięte przed siebie. Lewą ręką delikatnie dociskasz w dół. Rozciąga tylną torebkę stawową — ważne po zwichnięciu. Delikatnie, nie forsuj.</div>
+      <div class="ex-links">
+        <a href="https://www.youtube.com/results?search_query=sleeper+stretch+posterior+shoulder+capsule" target="_blank" data-ex="r6" data-type="yt">YouTube</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-r6" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r6')">Zapisz</button><div class="weight-history" id="wh-r6"></div></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
+      <span class="ex-num">R7</span>
+      <div class="ex-info">
+        <div class="ex-name">Face Pull (aktywacja)</div>
+        <div class="ex-tags"><span class="tag rehab">Rehab</span></div>
+      </div>
+      <span class="ex-sets">2 × 15</span><span class="ex-arr">▼</span>
+    </div>
+    <div class="ex-b">
+      <div class="ex-note">Identycznie jak R2. Synchronizuje rotatory przed wiosłowaniem.</div>
+      <div class="ex-links">
+        <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r7" data-type="mw">MuscleWiki</a>
+      </div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r7" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r7" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r7')">Zapisz</button><div class="weight-history" id="wh-r7"></div></div>
+    </div>
+  </div>
+
+  <h2>Malta — mini protokół (10–15.07)</h2>
+  <p>Codziennie rano z gumą, 10 min, bez siłowni.</p>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))"><span class="ex-num">M1</span><div class="ex-info"><div class="ex-name">Band External Rotation</div></div><span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span></div>
+    <div class="ex-b">
+      <div class="ex-note">Guma zaczepiona o klamkę. Łokieć przy ciele, rotacja na zewnątrz.</div>
+      <div class="ex-links"><a href="https://musclewiki.com/exercise/band-external-rotation" target="_blank">MuscleWiki</a><a href="https://www.youtube.com/results?search_query=band+external+rotation+shoulder+rehab" target="_blank">YouTube</a></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))"><span class="ex-num">M2</span><div class="ex-info"><div class="ex-name">Band Face Pull</div></div><span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span></div>
+    <div class="ex-b">
+      <div class="ex-note">Guma na poziomie twarzy. Ciągnij do uszu, łokcie wysoko.</div>
+      <div class="ex-links"><a href="https://www.youtube.com/results?search_query=band+face+pull+resistance+band+form" target="_blank">YouTube</a></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))"><span class="ex-num">M3</span><div class="ex-info"><div class="ex-name">YTWL z gumą</div></div><span class="ex-sets">2 × 10 (każda litera)</span><span class="ex-arr">▼</span></div>
+    <div class="ex-b">
+      <div class="ex-note">Stojąc, guma pod stopami. Ręce kolejno w Y, T, W, L. Każda litera angażuje inną część stożka rotatorów. Lekka guma.</div>
+      <div class="ex-links"><a href="https://www.youtube.com/results?search_query=YTWL+exercise+rotator+cuff+band" target="_blank">YouTube</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ZASADY ══════════ -->
+<div id="tab-zasady" class="section">
+  <h1>Zasady</h1>
+
+  <h2>Strefy tętna</h2>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Strefa</th><th>BPM</th><th>Odczucie</th><th>Kiedy</th></tr></thead>
+    <tbody>
+      <tr><td class="cg">Z1</td><td>&lt;125</td><td>Bardzo lekko, swobodna rozmowa</td><td>Rozgrzewka / schłodzenie</td></tr>
+      <tr><td class="cg">Z2</td><td>125–160</td><td>Komfortowo, rozmowa możliwa</td><td>Większość biegów</td></tr>
+      <tr><td class="ca">Z3</td><td>160–172</td><td>Ciężko, 1 słowo tak</td><td>Tempo runy (od tyg. 10)</td></tr>
+      <tr><td class="cr">Z4</td><td>173–185</td><td>Bardzo ciężko, nie możesz mówić</td><td>Interwały (od tyg. 13)</td></tr>
+      <tr><td class="cr">Z5</td><td>&gt;185</td><td>Maksymalny wysiłek, krótko</td><td>Sprint / finisz wyścigu</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Bieg przed siłownią</h2>
+  <div class="box box-blue">
+    Zawsze <strong>najpierw bieg, potem siłownia</strong>.<br><br>
+    <strong>Zasada awaryjna:</strong> Jeśli Wtorek lub Czwartek odpada — przesuń FBW na poprzedni dzień po biegu (Pon lub Śr). Zmniejsz ciężary o 10–15%. Lepszy trening łączony niż pominięty.
+  </div>
+
+  <h2>Progresja siły</h2>
+  <div class="box box-green">
+    <strong>Reguła 2-for-2:</strong> Jeśli w ostatniej serii zrobiłeś 2+ powt. więcej niż cel → zwiększ ciężar o 2.5–5 kg (nogi/plecy) lub 1–2.5 kg (bark/ramiona). Technika musi być czysta.
+  </div>
+  <div class="box box-blue">
+    <strong>Rotatory barku:</strong> Progresja co 2 tygodnie, nie co trening.<br>
+    <strong>Hipermobilność:</strong> Zatrzymuj się 10–15° przed maksymalnym zakresem w bench, OHP i lat pulldown.
+  </div>
+
+  <h2>Tygodnie RE</h2>
+  <div class="box box-green">
+    Co 4 tygodnie — obowiązkowo. Bieganie –30%, ciężary –20%, bez długiego biegu. Adaptacja zachodzi podczas odpoczynku, nie podczas treningu. Pominięcie RE = brak postępów lub kontuzja.
+  </div>
+
+  <h2>Taper</h2>
+  <div class="box box-blue">
+    Celowe zmniejszenie obciążenia na <strong>2 tygodnie przed wyścigiem</strong>. Redukujesz kilometraż o ~40%, utrzymujesz intensywność. Ciało uzupełnia glikogen, naprawia mikrourazy, wyrównuje hormony. Efekt: wchodzisz na start wypoczęty i szybszy. Będziesz czuł się "za świeży" i miał ochotę biegać więcej — <strong>nie rób tego.</strong>
+  </div>
+
+  <h2>Sygnały stop</h2>
+  <div class="box box-amber">
+    <strong>Bark:</strong> Ostry ból lub kliknięcie = przerwij, zmniejsz zakres lub ciężar.<br>
+    <strong>Bieganie:</strong> Ból ścięgna, kolana lub kostki = zwolnij do marszu.
+  </div>
+
+  <h2>Recovery po Cracovii</h2>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Etap</th><th>Aktywność</th><th>Uwagi</th></tr></thead>
+    <tbody>
+      <tr><td class="cg">Dni 1–3</td><td>Pełny odpoczynek</td><td>Spacer max. Jedz normalnie.</td></tr>
+      <tr><td class="cg">Dni 4–7</td><td>Mobilność 20 min</td><td>Rozciąganie, rolowanie. Bark rehab z gumą.</td></tr>
+      <tr><td class="cg">Tyg. 2</td><td>Rower / pływanie</td><td>Lekka siłownia — bark i core, bez nóg.</td></tr>
+      <tr><td class="cg">Tyg. 3</td><td>Z2 20–30 min</td><td>Bardzo wolno. Ból = tydzień przerwy.</td></tr>
+      <tr><td class="cg">Tyg. 4+</td><td>Normalny trening</td><td>Nowy cel: maraton? OCR? Skoki? 💪</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ══════════ SUPLEMENTY ══════════ -->
+<div id="tab-supp" class="section">
+  <h1>Suplementacja</h1>
+
+  <div class="supp-item">
+    <div class="supp-name">Kreatyna monohydrat (SFD)</div>
+    <div class="supp-when">Codziennie — 5g, stała pora</div>
+    <div class="supp-why">Siła, regeneracja, nie tuczy</div>
+  </div>
+  <div class="supp-item">
+    <div class="supp-name">Omega-3 Strong (Allnutrition)</div>
+    <div class="supp-when">Do posiłku — 2–3 kapsułki</div>
+    <div class="supp-why">Stany zapalne, regeneracja stawu barkowego</div>
+  </div>
+  <div class="supp-item">
+    <div class="supp-name">Kolagen + Cignon shots</div>
+    <div class="supp-when">30–60 min przed treningiem barku + wit. C</div>
+    <div class="supp-why">Chrząstka, ścięgna, obrąbek</div>
+  </div>
+  <div class="supp-item">
+    <div class="supp-name">Magnez + Potas + B6 (SFD)</div>
+    <div class="supp-when">Wieczorem — 4 tabletki</div>
+    <div class="supp-why">Sen, skurcze mięśni, regeneracja</div>
+  </div>
+  <div class="supp-item">
+    <div class="supp-name">Elektrolity musujące (Allnutrition)</div>
+    <div class="supp-when">Podczas biegu ≥45 min — 1–2 tabl. / 500ml</div>
+    <div class="supp-why">Uzupełnienie sodu, potasu, magnezu</div>
+  </div>
+  <div class="supp-item">
+    <div class="supp-name" style="color:var(--faint)">Spalacze (piperyna, chrom, waterout)</div>
+    <div class="supp-when" style="color:var(--amber)">Waterout nie przed bieganiem — ryzyko odwodnienia</div>
+    <div class="supp-why">Marginalny efekt przy deficycie kalorycznym</div>
+  </div>
+
+  <h2>Domowy izotonik</h2>
+  <div class="box box-blue">
+    500ml wody + 1–2 tabletki elektrolitów + 1 łyżeczka miodu + szczypta soli + sok z cytryny opcjonalnie. Do soft flaska bez problemu.
+  </div>
+  <div class="box box-green">
+    <strong>Białko:</strong> Bez suplementacji do 80 kg — OK. W dni treningowe jedz więcej białka z jedzenia: jajka, twaróg, kurczak, ryba.
+  </div>
+</div>
+
+<button class="stbtn" id="stbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const WEEKS = [
+  { w: 6, phase:"faza1", re:false, malta:false, start:"04.05.2026", days:["04.05","05.05","06.05","07.05","08.05","09.05","10.05"] },
+  { w: 7, phase:"faza1", re:false, malta:false, start:"11.05.2026", days:["11.05","12.05","13.05","14.05","15.05","16.05","17.05"] },
+  { w: 8, phase:"faza1", re:false, malta:false, start:"18.05.2026", days:["18.05","19.05","20.05","21.05","22.05","23.05","24.05"], race10k:true },
+  { w: 9, phase:"faza1", re:false, malta:false, start:"25.05.2026", days:["25.05","26.05","27.05","28.05","29.05","30.05","31.05"] },
+  { w:10, phase:"faza2", re:false, malta:false, start:"01.06.2026", days:["01.06","02.06","03.06","04.06","05.06","06.06","07.06"] },
+  { w:11, phase:"faza2", re:false, malta:false, start:"08.06.2026", days:["08.06","09.06","10.06","11.06","12.06","13.06","14.06"] },
+  { w:12, phase:"faza2", re:true,  malta:false, start:"15.06.2026", days:["15.06","16.06","17.06","18.06","19.06","20.06","21.06"] },
+  { w:13, phase:"faza2", re:false, malta:false, start:"22.06.2026", days:["22.06","23.06","24.06","25.06","26.06","27.06","28.06"] },
+  { w:14, phase:"faza2", re:false, malta:false, start:"29.06.2026", days:["29.06","30.06","01.07","02.07","03.07","04.07","05.07"] },
+  { w:15, phase:"faza2", re:false, malta:true,  start:"06.07.2026", days:["06.07","07.07","08.07","09.07","10.07","11.07","12.07"] },
+  { w:16, phase:"faza2", re:false, malta:true,  start:"13.07.2026", days:["13.07","14.07","15.07","16.07","17.07","18.07","19.07"] },
+  { w:17, phase:"faza2", re:true,  malta:false, start:"20.07.2026", days:["20.07","21.07","22.07","23.07","24.07","25.07","26.07"] },
+  { w:18, phase:"faza2", re:false, malta:false, start:"27.07.2026", days:["27.07","28.07","29.07","30.07","31.07","01.08","02.08"] },
+  { w:19, phase:"faza2", re:false, malta:false, start:"03.08.2026", days:["03.08","04.08","05.08","06.08","07.08","08.08","09.08"] },
+  { w:20, phase:"faza2", re:false, malta:false, start:"10.08.2026", days:["10.08","11.08","12.08","13.08","14.08","15.08","16.08"] },
+  { w:21, phase:"faza2", re:true,  malta:false, start:"17.08.2026", days:["17.08","18.08","19.08","20.08","21.08","22.08","23.08"] },
+  { w:22, phase:"faza2", re:false, malta:false, start:"24.08.2026", days:["24.08","25.08","26.08","27.08","28.08","29.08","30.08"] },
+  { w:23, phase:"faza2", re:false, malta:false, start:"31.08.2026", days:["31.08","01.09","02.09","03.09","04.09","05.09","06.09"] },
+  { w:24, phase:"faza2", re:false, malta:false, start:"07.09.2026", days:["07.09","08.09","09.09","10.09","11.09","12.09","13.09"] },
+  { w:25, phase:"faza2", re:true,  malta:false, start:"14.09.2026", days:["14.09","15.09","16.09","17.09","18.09","19.09","20.09"] },
+  { w:26, phase:"taper", re:false, malta:false, start:"21.09.2026", days:["21.09","22.09","23.09","24.09","25.09","26.09","27.09"] },
+  { w:27, phase:"taper", re:false, malta:false, start:"28.09.2026", days:["28.09","29.09","30.09","01.10","02.10","03.10","04.10"] },
+  { w:28, phase:"race",  re:false, malta:false, start:"05.10.2026", days:["05.10","06.10","07.10","08.10","09.10","10.10","11.10"] },
+  { w:29, phase:"recovery", re:false, malta:false, start:"12.10.2026", days:["12.10","13.10","14.10","15.10","16.10","17.10","18.10"] },
+  { w:30, phase:"recovery", re:false, malta:false, start:"19.10.2026", days:["19.10","20.10","21.10","22.10","23.10","24.10","25.10"] },
+  { w:31, phase:"recovery", re:false, malta:false, start:"26.10.2026", days:["26.10","27.10","28.10","29.10","30.10","31.10","01.11"] },
+];
+
+const PHASES = [
+  { id:'faza1',    label:'Faza 1 — Initial',    meta:'Tyg. 1–9 · Maj',                  dot:'#6ba3d6', weeks:[6,7,8,9] },
+  { id:'faza2',    label:'Faza 2 — Progression',meta:'Tyg. 10–25 · Czerwiec–Wrzesień',  dot:'#d4a84b', weeks:[10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25] },
+  { id:'taper',    label:'Faza 3 — Taper',      meta:'Tyg. 26–27 · 21.09–04.10',        dot:'#e07b54', weeks:[26,27] },
+  { id:'race',     label:'Cracovia Półmaraton',  meta:'11.10.2026',                       dot:'#d4a84b', weeks:[28] },
+  { id:'recovery', label:'Faza 4 — Recovery',   meta:'Październik',                      dot:'#8a8890', weeks:[29,30,31] },
+];
+
+const DN = ['Pon','Wt','Śr','Czw','Pt','Sob','Nd'];
+const _d = new Date();
+const TODAY = String(_d.getDate()).padStart(2,'0') + '.' + String(_d.getMonth()+1).padStart(2,'0');
+
+function getTask(w, di) {
+  const wk = WEEKS.find(x => x.w === w);
+  if (!wk) return {cls:'tc-rest', txt:'—'};
+  const {phase, re, malta} = wk;
+
+  if (malta) {
+    const m = {
+      15:[{cls:'tc-z2',txt:"Z2 45'"},{cls:'tc-z3',txt:"Tempo 20'"},{cls:'tc-z2',txt:"Z2 40'"},{cls:'tc-rest',txt:'Bark\n+opcj.'},{cls:'tc-spec',txt:'🌴 Malta\nod 10.07'},{cls:'tc-long',txt:"🌴 Long 90'"},{cls:'tc-rest',txt:'REST'}],
+      16:[{cls:'tc-z2',txt:"🌴 Z2 50'"},{cls:'tc-z3',txt:"🌴 Tempo 25'"},{cls:'tc-rest',txt:'🌴 Malta\ndo 15.07'},{cls:'tc-fbw',txt:'FBW B\n(powrót)'},{cls:'tc-z2',txt:"Z2 50'"},{cls:'tc-long',txt:'Long ~13km'},{cls:'tc-rest',txt:'REST'}]
+    };
+    return (m[w]||[])[di]||{cls:'tc-rest',txt:'—'};
+  }
+
+  // Week 8 = Rossmann Run 10K (race week, not RE)
+  if (wk.race10k) {
+    const r10k = [
+      {cls:'tc-z2',   txt:"Z2 40'"},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-z2',   txt:"Z2 30'\n+4\xd7100m"},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-race', txt:'\uD83C\uDFC1 Rossmann\nRun 10K'},
+      {cls:'tc-rest', txt:'REST'}
+    ];
+    return r10k[di];
+  }
+
+  if (re) {
+    const longRE = w===12 ? '60min' : (w===17 ? '~10km' : (w===21 ? '~12km' : '~10km'));
+    const reD = [
+      {cls:'tc-z2',   txt:'Z2 35min'},
+      {cls:'tc-fbw',  txt:'FBW A -20%'},
+      {cls:'tc-z2',   txt:'Z2 30min'},
+      {cls:'tc-rest', txt:'Wolne'},
+      {cls:'tc-z2',   txt:'Z2 35min'},
+      {cls:'tc-long', txt:'Long ' + longRE},
+      {cls:'tc-rest', txt:'REST'}
+    ];
+    return reD[di];
+  }
+
+  if (di===0) {
+    if (phase==='faza1') return {cls:'tc-z2', txt:`Z2 ${w===6?60:(w===7?60:(w===9?50:40))}'`};
+    if (phase==='faza2') {
+      const ints={18:"5×800m",19:"6×800m",20:"8×400m",22:"5×800m",23:"6×800m",24:"5×1000m"};
+      if (ints[w]) return {cls:'tc-int', txt:ints[w]};
+      return {cls:'tc-z2', txt:"Z2 50'"};
+    }
+    if (phase==='taper')    return {cls:'tc-z2', txt:w===26?"Z2 30'":"Z2 20'"};
+    if (phase==='race')     return {cls:'tc-z2', txt:"Z2 25'"};
+    if (phase==='recovery') return {cls:'tc-rest', txt:w===29?'Spacer':"Z2 20'"};
+  }
+  if (di===1) {
+    if (phase==='faza1'||phase==='faza2') return {cls:'tc-fbw', txt:'FBW A'};
+    if (phase==='taper') return w===26?{cls:'tc-fbw',txt:'FBW A ↓\n-30%'}:{cls:'tc-rest',txt:'REST'};
+    return {cls:'tc-rest', txt:'REST'};
+  }
+  if (di===2) {
+    if (phase==='faza1') { const s={6:"Z2 50'\n+10×100m",7:"Z2 55'\n+10×100m",9:"Z2 50'\n+6×100m"}; return {cls:'tc-z2', txt:s[w]||"Z2 40'"}; }
+    if (phase==='faza2') {
+      if (w===10) return {cls:'tc-z3', txt:"Tempo 20'\n+6×100m"};
+      if (w===11) return {cls:'tc-z3', txt:"Tempo 25'\n+6×100m"};
+      const t={13:"Tempo 25'",14:"Tempo 30'",18:"Tempo 30'",19:"Tempo 30'",20:"Tempo 35'",22:"Tempo 30'",23:"Tempo 35'",24:"Tempo 35'"};
+      return t[w]?{cls:'tc-z3',txt:t[w]}:{cls:'tc-z2',txt:"Z2 45'"};
+    }
+    if (phase==='taper') return {cls:'tc-z3', txt:w===26?"Tempo 20'\n+4×100m":"3×1' tempo"};
+    return {cls:'tc-rest', txt:'REST'};
+  }
+  if (di===3) {
+    if (phase==='faza1'||phase==='faza2') return {cls:'tc-fbw', txt:'FBW B'};
+    return {cls:'tc-rest', txt:'REST'};
+  }
+  if (di===4) {
+    if (phase==='faza1') return {cls:'tc-z2', txt:`Z2 ${w===6?60:(w===7?65:(w===9?55:30))}'`};
+    if (phase==='faza2') { const f={10:"Z2 50'",11:"Z2 55'",13:"Z2 55'",14:"Z2 55'",18:"Z2 50'",19:"Z2 55'",20:"Z2 55'",22:"Z2 50'",23:"Z2 55'",24:"Z2 60'"}; return {cls:'tc-z2', txt:f[w]||"Z2 50'"}; }
+    if (phase==='taper') return {cls:'tc-z2', txt:w===26?"Z2 25'":"Jogging 15'"};
+    if (phase==='race')  return {cls:'tc-z2', txt:"Jogging 15'"};
+    return {cls:'tc-rest', txt:'REST'};
+  }
+  if (di===5) {
+    if (phase==='faza1') { const lr={6:"Long 100'",7:"Long 110'",9:"Long 80'"}; return {cls:'tc-long', txt:lr[w]||"Long 60'"}; }
+    if (phase==='faza2') { const lr2={10:"Long 90'",11:"Long 100'",13:'~12km',14:'~13km',18:'~14km',19:'~15km',20:'~16km',22:'~17km',23:'~19km',24:'~20km'}; return {cls:'tc-long', txt:'Long '+(lr2[w]||'~12km')}; }
+    if (phase==='taper') return {cls:'tc-long', txt:w===26?'Long 12km':'Long 8km'};
+    if (phase==='recovery') return {cls:w===29?'tc-rest':'tc-long', txt:w===29?'Mobilność':(w===30?'~10km':'~14km')};
+    return {cls:'tc-rest', txt:'REST'};
+  }
+  if (di===6) {
+    if (phase==='race'&&w===28) return {cls:'tc-race', txt:'🏁 CRACOVIA\n11.10.2026'};
+    return {cls:'tc-rest', txt:'REST'};
+  }
+  return {cls:'tc-rest', txt:'—'};
+}
+
+function buildCal() {
+  const root = document.getElementById('cal-root');
+  PHASES.forEach((ph, pi) => {
+    const pb = document.createElement('div');
+    pb.className = 'phase-block' + (pi < 2 ? ' open' : '');
+    pb.innerHTML = `
+      <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+        <span class="phase-dot" style="background:${ph.dot}"></span>
+        <span class="ph-label">${ph.label}</span>
+        <span class="ph-meta">${ph.meta}</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-weeks"></div>`;
+    const pw = pb.querySelector('.phase-weeks');
+
+    ph.weeks.forEach(wn => {
+      const wk = WEEKS.find(x => x.w === wn);
+      if (!wk) return;
+      // Calculate current week dynamically
+      const _today = new Date();
+      const _todayMs = new Date(_today.getFullYear(), _today.getMonth(), _today.getDate()).getTime();
+      const _week6Start = new Date(2026, 4, 4).getTime(); // 04.05.2026
+      const _weekOffset = Math.floor((_todayMs - _week6Start) / (7 * 24 * 60 * 60 * 1000));
+      const _currentWeek = 6 + _weekOffset;
+      const isnow = wk.w === _currentWeek;
+      const wr = document.createElement('div');
+      wr.className = 'week-row' + (isnow?' is-now expanded':'') + (wk.re?' is-re':'') + (wk.malta?' is-malta':'') + (wk.phase==='race'?' is-race':'');
+
+      let badge = '';
+      if (isnow)           badge = `<span class="wk-badge" style="color:var(--accent);border-color:var(--accent)">★ teraz</span>`;
+      else if (wk.race10k)  badge = `<span class="wk-badge" style="color:var(--amber);border-color:var(--amber)">🏁 Rossmann</span>`;
+      else if (wk.re)      badge = `<span class="wk-badge" style="color:var(--green);border-color:var(--green)">RE</span>`;
+      else if (wk.malta)   badge = `<span class="wk-badge" style="color:var(--amber);border-color:var(--amber)">🌴 Malta</span>`;
+      else if (wk.phase==='race') badge = `<span class="wk-badge" style="color:var(--amber);border-color:var(--amber)">🏁</span>`;
+
+      wr.innerHTML = `
+        <div class="week-hdr" onclick="this.parentElement.classList.toggle('expanded')">
+          <span class="wk-num">Tyg ${wk.w}</span>
+          <span class="wk-dates">${wk.start.replace('.2026','')} – ${wk.days[6]}</span>
+          ${badge}
+          <span class="wk-arrow">▼</span>
+        </div>
+        <div class="days-grid"></div>`;
+      pw.appendChild(wr);
+
+      const grid = wr.querySelector('.days-grid');
+      DN.forEach((dn, di) => {
+        const t = getTask(wk.w, di);
+        const cell = document.createElement('div');
+        cell.className = 'day-cell' + (wk.days[di]===TODAY?' is-today':'');
+        cell.innerHTML = `<div class="dc-name">${dn}</div><div class="dc-date">${wk.days[di]}</div><div class="dc-task ${t.cls}">${(t.txt||'').replace(/\n/g,'<br>')}</div>`;
+        grid.appendChild(cell);
+      });
+    });
+    root.appendChild(pb);
+  });
+}
+
+function TAB(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function TOG(el) { el.classList.toggle('open'); }
+window.addEventListener('scroll',()=>{ document.getElementById('stbtn').classList.toggle('show',window.scrollY>300); });
+buildCal();
+</script>
+
+
+
+
+<script>
+const SB_URL = 'https://cxrkmiejbrepmtqjdmww.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4cmttaWVqYnJlcG10cWpkbXd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjE0NDcsImV4cCI6MjA5NDc5NzQ0N30.tz-RN9Hn4DSqFF7xe7vH0gCPKpb7doLedyFrB_PjLv0';
+
+const EX_NAMES = {
+  a1:'Incline DB Press', a2:'Dumbbell OHP', a3:'Cable Lateral Raise',
+  a4:'Flat DB Press', a5:'Triceps Pushdown', a6:'Overhead Triceps Ext.',
+  a7:'Dead Bug (A)', a8:'Band Pull-Apart',
+  b1:'Barbell Row', b2:'Lat Pulldown', b3:'Seated Cable Row',
+  b4:'DB Curl + Hammer', b5:'Goblet Squat', b6:'Romanian Deadlift',
+  b7:'Calf Raise', b8:'Dead Bug (B)',
+  r1:'External Rotation', r2:'Face Pull', r3:'Internal Rotation',
+  r4:'Wall Slides', r5:'YT Raise', r6:'Sleeper Stretch', r7:'Face Pull (aktywacja)'
+};
+
+async function sbFetch(path, opts) {
+  opts = opts || {};
+  const res = await fetch(SB_URL + '/rest/v1/' + path, {
+    method: opts.method || 'GET',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation'
+    },
+    body: opts.body || undefined
+  });
+  if (res.status === 204 || res.status === 201) return null;
+  if (!res.ok) { const t = await res.text(); throw new Error(t); }
+  return res.json();
+}
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+async function saveWeight(exId) {
+  const wEl = document.getElementById('wi-' + exId);
+  const rEl = document.getElementById('ri-' + exId);
+  const btn = document.querySelector('[onclick="saveWeight(\'' + exId + '\')"]');
+  const weight = wEl ? (parseFloat(wEl.value) || null) : null;
+  const reps   = rEl ? (parseInt(rEl.value)   || null) : null;
+  if (!weight && !reps) return;
+
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  try {
+    // Check if entry exists for today
+    const today = todayStr();
+    const existing = await sbFetch(
+      'workout_logs?exercise_id=eq.' + exId +
+      '&logged_at=gte.' + today + 'T00:00:00' +
+      '&logged_at=lte.' + today + 'T23:59:59'
+    );
+
+    if (existing && existing.length > 0) {
+      // Update existing
+      await sbFetch('workout_logs?id=eq.' + existing[0].id, {
+        method: 'PATCH',
+        prefer: 'return=minimal',
+        body: JSON.stringify({ weight_kg: weight, reps: reps })
+      });
+    } else {
+      // Insert new
+      await sbFetch('workout_logs', {
+        method: 'POST',
+        prefer: 'return=minimal',
+        body: JSON.stringify({ exercise_id: exId, weight_kg: weight, reps: reps, sets: 1 })
+      });
+    }
+
+    btn.textContent = '✓ Zapisano';
+    btn.classList.add('saved');
+    if (wEl) wEl.value = '';
+    if (rEl) rEl.value = '';
+    setTimeout(() => { btn.textContent = 'Zapisz'; btn.classList.remove('saved'); btn.disabled = false; }, 2000);
+    loadHistory(exId);
+  } catch(e) {
+    console.error(e);
+    btn.textContent = 'Błąd: ' + (e.message || 'sprawdź konsolę');
+    btn.style.background = 'var(--red)';
+    setTimeout(() => {
+      btn.textContent = 'Zapisz';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }
+}
+
+async function loadHistory(exId) {
+  const el = document.getElementById('wh-' + exId);
+  if (!el) return;
+  try {
+    const data = await sbFetch(
+      'workout_logs?exercise_id=eq.' + exId + '&order=logged_at.desc&limit=4'
+    );
+    if (!data || data.length === 0) {
+      el.innerHTML = '<span style="color:var(--faint)">brak historii</span>';
+      return;
+    }
+    const wEl = document.getElementById('wi-' + exId);
+    const rEl = document.getElementById('ri-' + exId);
+    if (wEl && data[0].weight_kg) wEl.placeholder = data[0].weight_kg + ' kg';
+    if (rEl && data[0].reps)      rEl.placeholder = data[0].reps + ' powt.';
+
+    el.innerHTML = data.map(function(r) {
+      const d = new Date(r.logged_at);
+      const ds = d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0');
+      const parts = [];
+      if (r.weight_kg) parts.push('<strong>' + r.weight_kg + 'kg</strong>');
+      if (r.reps) parts.push(r.reps + ' powt.');
+      return '<span>' + ds + ' · ' + parts.join(' · ') + '</span>';
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<span style="color:var(--faint)">—</span>';
+  }
+}
+
+// ── DZIENNIK ──────────────────────────────────────────────────────────────────
+
+let _allLogs = null;
+let _chartInstance = null;
+
+async function loadDziennik() {
+  const loading = document.getElementById('dz-loading');
+  const progress = document.getElementById('dz-progress');
+  if (!loading) return;
+
+  try {
+    const data = await sbFetch('workout_logs?order=logged_at.desc&limit=500');
+    _allLogs = data || [];
+
+    loading.style.display = 'none';
+    progress.style.display = 'block';
+
+    // Populate exercise select (only those with data)
+    const exWithData = [...new Set(_allLogs.map(r => r.exercise_id))];
+    const sel = document.getElementById('dz-ex-select');
+    sel.innerHTML = exWithData.map(id =>
+      '<option value="' + id + '">' + (EX_NAMES[id] || id) + '</option>'
+    ).join('');
+
+    renderChart();
+    renderHistory();
+  } catch(e) {
+    loading.textContent = 'Błąd ładowania: ' + e.message;
+  }
+}
+
+function renderChart() {
+  const sel = document.getElementById('dz-ex-select');
+  if (!sel || !_allLogs) return;
+  const exId = sel.value;
+  const logs = _allLogs
+    .filter(r => r.exercise_id === exId && r.weight_kg)
+    .reverse();
+
+  const canvas = document.getElementById('dz-chart');
+  const empty = document.getElementById('dz-chart-empty');
+
+  if (logs.length === 0) {
+    canvas.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  canvas.style.display = 'block';
+  empty.style.display = 'none';
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth - 28;
+  canvas.width = W;
+  canvas.height = 180;
+
+  const weights = logs.map(r => r.weight_kg);
+  const dates = logs.map(r => {
+    const d = new Date(r.logged_at);
+    return d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0');
+  });
+
+  const minW = Math.min(...weights) * 0.9;
+  const maxW = Math.max(...weights) * 1.1;
+  const pad = { top: 20, right: 16, bottom: 36, left: 36 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = 180 - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, W, 180);
+
+  // Grid lines
+  ctx.strokeStyle = '#3a3a44';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (chartH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    const val = maxW - ((maxW - minW) / 4) * i;
+    ctx.fillStyle = '#54525a';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(val.toFixed(1), pad.left - 4, y + 3);
+  }
+
+  if (logs.length < 2) {
+    // Single point
+    const x = pad.left + chartW / 2;
+    const y = pad.top + chartH / 2;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#e07b54';
+    ctx.fill();
+  } else {
+    const xStep = chartW / (logs.length - 1);
+
+    // Gradient fill
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+    grad.addColorStop(0, 'rgba(224,123,84,0.3)');
+    grad.addColorStop(1, 'rgba(224,123,84,0.02)');
+
+    ctx.beginPath();
+    logs.forEach((r, i) => {
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - ((r.weight_kg - minW) / (maxW - minW)) * chartH;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    // Close fill path
+    ctx.lineTo(pad.left + (logs.length-1) * xStep, pad.top + chartH);
+    ctx.lineTo(pad.left, pad.top + chartH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = '#e07b54';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    logs.forEach((r, i) => {
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - ((r.weight_kg - minW) / (maxW - minW)) * chartH;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Dots + labels
+    logs.forEach((r, i) => {
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - ((r.weight_kg - minW) / (maxW - minW)) * chartH;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#e07b54';
+      ctx.fill();
+      ctx.strokeStyle = '#26262c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Weight label above dot
+      ctx.fillStyle = '#e0ddd8';
+      ctx.font = 'bold 10px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(r.weight_kg + 'kg', x, y - 8);
+
+      // Date label below
+      ctx.fillStyle = '#54525a';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillText(dates[i], x, pad.top + chartH + 14);
+    });
+  }
+}
+
+function renderHistory() {
+  const el = document.getElementById('dz-history');
+  if (!el || !_allLogs) return;
+
+  // Group by date
+  const byDate = {};
+  _allLogs.forEach(r => {
+    const d = new Date(r.logged_at);
+    const key = d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
+    if (!byDate[key]) byDate[key] = [];
+    byDate[key].push(r);
+  });
+
+  el.innerHTML = Object.entries(byDate).map(([date, logs]) => {
+    const rows = logs.map(r => {
+      const parts = [];
+      if (r.weight_kg) parts.push('<strong style="color:var(--green)">' + r.weight_kg + 'kg</strong>');
+      if (r.reps) parts.push(r.reps + ' powt.');
+      return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bg3)">' +
+        '<span style="color:var(--text)">' + (EX_NAMES[r.exercise_id] || r.exercise_id) + '</span>' +
+        '<span style="color:var(--muted)">' + parts.join(' · ') + '</span>' +
+        '</div>';
+    }).join('');
+
+    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:10px">' +
+      '<div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">' + date + '</div>' +
+      rows + '</div>';
+  }).join('');
+}
+
+// Load dziennik when tab opens
+const _origTAB = window.TAB;
+window.TAB = function(id) {
+  _origTAB(id);
+  if (id === 'dziennik') loadDziennik();
+};
+
+// Load history when exercise card opens
+const _TOG = window.TOG;
+window.TOG = function(el) {
+  _TOG(el);
+  if (el.classList.contains('open')) {
+    el.querySelectorAll('.weight-history').forEach(function(h) {
+      loadHistory(h.id.replace('wh-',''));
+    });
+  }
+};
+</script>
+
+
+<!-- ── EDITOR MODE ── -->
+<button class="editor-btn" id="editorBtn" onclick="toggleEditor()">🔒 Tryb edycji</button>
+
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <h3>Tryb edycji</h3>
+    <p>Wprowadź hasło aby odblokować edycję ciężarów</p>
+    <input class="pw-input" id="pwInput" type="password" placeholder="••••••••"
+           onkeydown="if(event.key==='Enter') checkPw()">
+    <button class="pw-submit" onclick="checkPw()">Odblokuj</button>
+    <span class="pw-cancel" onclick="closePw()">Anuluj</span>
+  </div>
+</div>
+
+<script>
+// Simple hash check - not cryptographic but sufficient for this use case
+const PW_HASH = '7f8b9c2a4e1d3f6a'; // R@mzes16 encoded
+
+function simpleHash(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8,'0');
+}
+
+// Store actual pw check
+const _VALID = btoa('R@mzes16');
+
+function toggleEditor() {
+  if (document.body.classList.contains('editor-mode')) {
+    // Turn off
+    document.body.classList.remove('editor-mode');
+    document.getElementById('editorBtn').classList.remove('active');
+    document.getElementById('editorBtn').textContent = '🔒 Tryb edycji';
+    sessionStorage.removeItem('editor_unlocked');
+  } else {
+    // Check if already unlocked this session
+    if (sessionStorage.getItem('editor_unlocked') === '1') {
+      enableEditor();
+    } else {
+      document.getElementById('pwOverlay').classList.add('open');
+      setTimeout(() => document.getElementById('pwInput').focus(), 100);
+    }
+  }
+}
+
+function checkPw() {
+  const input = document.getElementById('pwInput');
+  const val = input.value;
+  if (btoa(val) === _VALID) {
+    sessionStorage.setItem('editor_unlocked', '1');
+    input.value = '';
+    closePw();
+    enableEditor();
+  } else {
+    input.classList.add('error');
+    input.value = '';
+    setTimeout(() => input.classList.remove('error'), 500);
+    input.focus();
+  }
+}
+
+function enableEditor() {
+  document.body.classList.add('editor-mode');
+  const btn = document.getElementById('editorBtn');
+  btn.classList.add('active');
+  btn.textContent = '🔓 Tryb edycji ON';
+}
+
+function closePw() {
+  document.getElementById('pwOverlay').classList.remove('open');
+  document.getElementById('pwInput').value = '';
+}
+
+// Close on overlay click
+document.getElementById('pwOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePw();
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePw();
+});
+</script>
+
+
+<!-- ══════════ DZIENNIK ══════════ -->
+<div id="tab-dziennik" class="section">
+  <h1>Dziennik treningowy</h1>
+  <p>Historia wszystkich zapisanych ciężarów i progresja.</p>
+
+  <div id="dz-loading" style="color:var(--muted);font-size:13px;padding:20px 0">Ładowanie...</div>
+
+  <!-- Progresja -->
+  <div id="dz-progress" style="display:none">
+    <h2>Progresja ciężarów</h2>
+    <div style="margin-bottom:12px">
+      <select id="dz-ex-select" onchange="renderChart()"
+        style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+               padding:8px 12px;color:var(--text);font-size:13px;width:100%">
+      </select>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:20px">
+      <canvas id="dz-chart" height="180"></canvas>
+      <div id="dz-chart-empty" style="display:none;text-align:center;color:var(--faint);font-size:13px;padding:40px 0">
+        Brak danych dla tego ćwiczenia
+      </div>
+    </div>
+
+    <!-- Historia po datach -->
+    <h2>Historia sesji</h2>
+    <div id="dz-history"></div>
+  </div>
+</div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Treningowy — Kuziu 2026</title>
+<style>
+:root {
+  --bg:       #1e1e22;
+  --bg2:      #26262c;
+  --bg3:      #2e2e36;
+  --border:   #3a3a44;
+  --text:     #e0ddd8;
+  --muted:    #8a8890;
+  --faint:    #54525a;
+  --accent:   #e07b54;
+  --blue:     #6ba3d6;
+  --green:    #6dba8a;
+  --amber:    #d4a84b;
+  --red:      #c96060;
+  --white:    #f5f2ee;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ── NAV ── */
+.nav {
+  display: flex; overflow-x: auto;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav button {
+  flex-shrink: 0; padding: 13px 18px;
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted); font-size: 14px; font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+  transition: color 0.15s;
+}
+.nav button.active { color: var(--white); border-bottom-color: var(--accent); }
+.nav button:hover  { color: var(--text); }
+
+/* ── LAYOUT ── */
+.section { display: none; padding: 22px 18px; max-width: 680px; margin: 0 auto; }
+.section.active { display: block; }
+
+/* ── TYPE ── */
+h1 { font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 5px; }
+h2 {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin: 28px 0 10px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 11px; font-weight: 600; color: var(--faint);
+     text-transform: uppercase; letter-spacing: 0.08em; margin: 18px 0 8px; }
+p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+
+/* ── STATS ── */
+.stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.stat {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 11px 15px; flex: 1; min-width: 68px;
+}
+.stat strong { display: block; font-size: 17px; color: var(--white); font-weight: 600; }
+.stat span   { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ── LEGEND ── */
+.legend { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.leg {
+  font-size: 11px; font-weight: 500;
+  padding: 4px 10px; border-radius: 5px;
+  background: var(--bg2); border: 1px solid var(--border);
+  color: var(--muted);
+}
+.leg .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+/* ── INFO BOXES ── */
+.box {
+  border-radius: 7px; padding: 12px 15px;
+  margin-bottom: 12px; font-size: 13.5px;
+  line-height: 1.65; border: 1px solid var(--border);
+  background: var(--bg2);
+}
+.box strong { color: var(--white); }
+.box-accent { border-left: 3px solid var(--accent); }
+.box-blue   { border-left: 3px solid var(--blue); }
+.box-green  { border-left: 3px solid var(--green); }
+.box-amber  { border-left: 3px solid var(--amber); }
+.box-red    { border-left: 3px solid var(--red); }
+
+/* ── PHASE BLOCKS ── */
+.phase-block { margin-bottom: 6px; }
+.phase-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 7px;
+  font-size: 13px; font-weight: 500; color: var(--text);
+  cursor: pointer; background: var(--bg2); border: 1px solid var(--border);
+  transition: background 0.15s;
+  user-select: none;
+}
+.phase-hdr:hover { background: var(--bg3); }
+.phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ph-label  { flex: 1; }
+.ph-meta   { font-size: 11px; color: var(--faint); }
+.ph-arrow  { color: var(--faint); font-size: 11px; transition: transform 0.2s; }
+.phase-block.open .ph-arrow { transform: rotate(180deg); }
+.phase-weeks { display: none; padding: 4px 0 0 0; }
+.phase-block.open .phase-weeks { display: block; }
+
+/* ── WEEK ROWS ── */
+.week-row {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 7px; margin-bottom: 4px; overflow: hidden;
+}
+.week-row.is-now  { border-color: var(--accent); }
+.week-row.is-re   { border-color: var(--green); }
+.week-row.is-malta{ border-color: var(--amber); }
+.week-row.is-race { border-color: var(--amber); }
+
+.week-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+.week-hdr:hover { background: var(--bg3); }
+.week-row.expanded .week-hdr { border-bottom-color: var(--border); }
+
+.wk-num   { font-size: 12px; font-weight: 600; color: var(--faint); min-width: 34px; }
+.wk-dates { font-size: 12px; color: var(--muted); flex: 1; }
+.wk-badge {
+  font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px;
+  background: var(--bg3); color: var(--muted);
+  border: 1px solid var(--border);
+}
+.wk-arrow { font-size: 10px; color: var(--faint); transition: transform 0.2s; }
+.week-row.expanded .wk-arrow { transform: rotate(180deg); }
+
+/* ── DAY GRID ── */
+.days-grid {
+  display: none;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px; background: var(--border);
+}
+.week-row.expanded .days-grid { display: grid; }
+
+.day-cell {
+  background: var(--bg);
+  padding: 8px 6px; min-height: 72px;
+}
+.day-cell.is-today { background: #2a2318; outline: 2px solid var(--accent); outline-offset: -2px; }
+.day-cell.is-today .dc-name { color: var(--accent); }
+
+.dc-name { font-size: 9px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+.dc-date { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+.day-cell.is-today .dc-date { color: var(--accent); }
+.dc-task { font-size: 11px; line-height: 1.5; }
+
+/* Task colours — restrained */
+.tc-z2   { color: var(--blue); }
+.tc-z3   { color: var(--amber); }
+.tc-int  { color: var(--accent); font-weight: 600; }
+.tc-long { color: var(--accent); font-weight: 600; }
+.tc-fbw  { color: var(--green); font-weight: 600; }
+.tc-rest { color: var(--faint); }
+.tc-race { color: var(--amber); font-weight: 700; }
+.tc-spec { color: var(--amber); }
+
+/* ── TABLE ── */
+.tbl-wrap { overflow-x: auto; margin-bottom: 16px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 380px; }
+.tbl th {
+  background: var(--bg2); color: var(--faint);
+  font-weight: 600; padding: 9px 8px; text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.tbl td { padding: 9px 8px; border-bottom: 1px solid var(--bg3); color: var(--muted); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl .cg { color: var(--green); font-weight: 500; }
+.tbl .ca { color: var(--amber); font-weight: 500; }
+.tbl .cr { color: var(--red);   font-weight: 500; }
+
+/* ── EXERCISE CARDS ── */
+.ex {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; margin-bottom: 7px; overflow: hidden;
+}
+.ex-h {
+  display: flex; align-items: center;
+  padding: 12px 14px; cursor: pointer; gap: 10px;
+}
+.ex-h:hover { background: var(--bg3); }
+.ex-num {
+  background: var(--bg3); color: var(--muted);
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 4px; flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.ex-info { flex: 1; }
+.ex-name { font-size: 14px; font-weight: 500; color: var(--white); }
+.ex-tags { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: 10px; padding: 2px 7px; border-radius: 4px;
+  background: var(--bg3); color: var(--muted);
+  border: 1px solid var(--border); font-weight: 500;
+}
+.tag.rehab { color: var(--amber); border-color: #4a4030; background: #2a2518; }
+.ex-sets { font-size: 13px; color: var(--green); font-weight: 500; flex-shrink: 0; white-space: nowrap; }
+.ex-arr  { color: var(--faint); font-size: 11px; flex-shrink: 0; transition: transform 0.2s; }
+.ex.open .ex-arr { transform: rotate(180deg); }
+.ex-b {
+  display: none; padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+}
+.ex.open .ex-b { display: block; }
+.ex-note { font-size: 13.5px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+.ex-note strong { color: var(--text); }
+.ex-links { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.ex-links a {
+  font-size: 12px; color: var(--blue);
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 5px; padding: 5px 12px; text-decoration: none;
+}
+.ex-links a:hover { background: var(--bg); }
+
+/* ── SUPP ── */
+.supp-item { padding: 12px 0; border-bottom: 1px solid var(--bg3); }
+.supp-item:last-child { border: none; }
+.supp-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
+.supp-when { font-size: 12px; color: var(--amber); }
+.supp-why  { font-size: 12px; color: var(--faint); margin-top: 2px; }
+
+/* ── SCROLL BTN ── */
+.stbtn {
+  position: fixed; bottom: 20px; right: 18px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 50%;
+  width: 40px; height: 40px; font-size: 17px;
+  cursor: pointer; display: none; z-index: 200;
+  align-items: center; justify-content: center;
+}
+.stbtn.show { display: flex; }
+
+
+/* ── WEIGHT TRACKER ── */
+.ex-weight {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.ex-weight label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;
+}
+.weight-input, .reps-input {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 5px; padding: 6px 8px; color: var(--white);
+  font-size: 13px; font-weight: 600; text-align: center;
+}
+.weight-input { width: 72px; }
+.reps-input   { width: 55px; }
+.weight-input:focus, .reps-input:focus { outline: none; border-color: var(--accent); }
+.weight-unit { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+.weight-save {
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 5px; padding: 6px 14px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+}
+.weight-save:active { opacity: 0.8; }
+.weight-save.saved { background: var(--green); }
+.weight-history { width: 100%; margin-top: 6px; font-size: 11px; }
+.weight-history span {
+  display: inline-block; margin-right: 6px; margin-bottom: 3px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2px 8px; color: var(--muted);
+}
+.weight-history span strong { color: var(--green); }
+
+
+/* ── EDITOR MODE ── */
+.editor-btn {
+  position: fixed; bottom: 20px; left: 18px;
+  background: var(--bg2); color: var(--faint);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 14px; font-size: 12px; font-weight: 500;
+  cursor: pointer; z-index: 200; transition: all 0.2s;
+}
+.editor-btn:hover { color: var(--muted); }
+.editor-btn.active {
+  background: var(--green); color: #fff;
+  border-color: var(--green);
+}
+.editor-only { display: none !important; }
+body.editor-mode .editor-only { display: flex !important; }
 
 /* Password modal */
 .pw-overlay {
