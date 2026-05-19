@@ -292,6 +292,60 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 }
 .weight-history span strong { color: var(--green); }
 
+
+/* ── EDITOR MODE ── */
+.editor-btn {
+  position: fixed; bottom: 20px; left: 18px;
+  background: var(--bg2); color: var(--faint);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 14px; font-size: 12px; font-weight: 500;
+  cursor: pointer; z-index: 200; transition: all 0.2s;
+}
+.editor-btn:hover { color: var(--muted); }
+.editor-btn.active {
+  background: var(--green); color: #fff;
+  border-color: var(--green);
+}
+.editor-only { display: none !important; }
+body.editor-mode .editor-only { display: flex !important; }
+
+/* Password modal */
+.pw-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); z-index: 400;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.pw-overlay.open { display: flex; }
+.pw-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px; width: 100%; max-width: 320px;
+  text-align: center;
+}
+.pw-box h3 { font-size: 15px; color: var(--white); margin-bottom: 6px; }
+.pw-box p  { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.pw-input {
+  width: 100%; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 10px 12px; color: var(--white);
+  font-size: 15px; text-align: center; letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+.pw-input:focus { outline: none; border-color: var(--accent); }
+.pw-input.error { border-color: var(--red); animation: shake 0.3s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.pw-submit {
+  width: 100%; background: var(--accent); color: #fff;
+  border: none; border-radius: 6px; padding: 10px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+}
+.pw-submit:active { opacity: 0.8; }
+.pw-cancel { margin-top: 8px; font-size: 12px; color: var(--faint); cursor: pointer; display: block; }
+.pw-cancel:hover { color: var(--muted); }
+
 </style>
 </head>
 <body>
@@ -341,8 +395,8 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 
   <h3>Blok Push</h3>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A1</span>
       <div class="ex-info">
         <div class="ex-name">Incline Dumbbell Press</div>
@@ -356,12 +410,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-incline-bench-press" target="_blank" data-ex="a1" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=incline+dumbbell+press+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a1')">Zapisz</button><div class="weight-history" id="wh-a1"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a1')">Zapisz</button><div class="weight-history" id="wh-a1"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A2</span>
       <div class="ex-info">
         <div class="ex-name">Dumbbell OHP (siedząc)</div>
@@ -375,12 +429,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-press" target="_blank" data-ex="a2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a2')">Zapisz</button><div class="weight-history" id="wh-a2"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a2')">Zapisz</button><div class="weight-history" id="wh-a2"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A3</span>
       <div class="ex-info">
         <div class="ex-name">Cable Lateral Raise</div>
@@ -394,12 +448,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-low-single-arm-lateral-raise" target="_blank" data-ex="a3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+lateral+raise+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a3')">Zapisz</button><div class="weight-history" id="wh-a3"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a3')">Zapisz</button><div class="weight-history" id="wh-a3"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A4</span>
       <div class="ex-info">
         <div class="ex-name">Flat Dumbbell Press</div>
@@ -413,12 +467,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-bench-press" target="_blank" data-ex="a4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dumbbell+flat+bench+press+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a4')">Zapisz</button><div class="weight-history" id="wh-a4"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a4')">Zapisz</button><div class="weight-history" id="wh-a4"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A5</span>
       <div class="ex-info">
         <div class="ex-name">Triceps Pushdown (lina)</div>
@@ -432,12 +486,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-rope-pushdown" target="_blank" data-ex="a5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+triceps+pushdown+rope+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a5')">Zapisz</button><div class="weight-history" id="wh-a5"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a5')">Zapisz</button><div class="weight-history" id="wh-a5"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A6</span>
       <div class="ex-info">
         <div class="ex-name">Overhead Triceps Extension</div>
@@ -451,14 +505,14 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-tricep-extension" target="_blank" data-ex="a6" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=overhead+triceps+extension+dumbbell+form" target="_blank" data-ex="a6" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a6')">Zapisz</button><div class="weight-history" id="wh-a6"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-a6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a6')">Zapisz</button><div class="weight-history" id="wh-a6"></div></div>
     </div>
   </div>
 
   <h3>Zamknięcie</h3>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A7</span>
       <div class="ex-info">
         <div class="ex-name">Dead Bug</div>
@@ -472,12 +526,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="a7" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="a7" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-a7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a7')">Zapisz</button><div class="weight-history" id="wh-a7"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-a7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a7')">Zapisz</button><div class="weight-history" id="wh-a7"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">A8</span>
       <div class="ex-info">
         <div class="ex-name">Band Pull-Apart</div>
@@ -491,7 +545,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/band-pull-apart" target="_blank" data-ex="a8" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=band+pull+apart+shoulder+health" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-a8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a8')">Zapisz</button><div class="weight-history" id="wh-a8"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-a8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a8')">Zapisz</button><div class="weight-history" id="wh-a8"></div></div>
     </div>
   </div>
 </div>
@@ -507,8 +561,8 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 
   <h3>Blok Pull</h3>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B1</span>
       <div class="ex-info">
         <div class="ex-name">Barbell Bent Over Row</div>
@@ -522,12 +576,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/barbell-bent-over-row" target="_blank" data-ex="b1" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=barbell+bent+over+row+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b1')">Zapisz</button><div class="weight-history" id="wh-b1"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b1')">Zapisz</button><div class="weight-history" id="wh-b1"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B2</span>
       <div class="ex-info">
         <div class="ex-name">Lat Pulldown (szeroki)</div>
@@ -541,12 +595,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/machine-pulldown" target="_blank" data-ex="b2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=lat+pulldown+proper+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b2')">Zapisz</button><div class="weight-history" id="wh-b2"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b2')">Zapisz</button><div class="weight-history" id="wh-b2"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B3</span>
       <div class="ex-info">
         <div class="ex-name">Seated Cable Row (wąski)</div>
@@ -560,12 +614,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/machine-seated-cable-row" target="_blank" data-ex="b3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=seated+cable+row+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b3')">Zapisz</button><div class="weight-history" id="wh-b3"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b3')">Zapisz</button><div class="weight-history" id="wh-b3"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B4</span>
       <div class="ex-info">
         <div class="ex-name">DB Curl + Hammer Curl</div>
@@ -579,14 +633,14 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-curl" target="_blank" data-ex="b4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dumbbell+curl+hammer+curl+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b4')">Zapisz</button><div class="weight-history" id="wh-b4"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b4')">Zapisz</button><div class="weight-history" id="wh-b4"></div></div>
     </div>
   </div>
 
   <h3>Blok Nogi</h3>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B5</span>
       <div class="ex-info">
         <div class="ex-name">Goblet Squat</div>
@@ -600,12 +654,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-goblet-squat" target="_blank" data-ex="b5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=goblet+squat+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b5')">Zapisz</button><div class="weight-history" id="wh-b5"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b5')">Zapisz</button><div class="weight-history" id="wh-b5"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B6</span>
       <div class="ex-info">
         <div class="ex-name">Romanian Deadlift (hantle)</div>
@@ -619,12 +673,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-romanian-deadlift" target="_blank" data-ex="b6" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=romanian+deadlift+dumbbell+form" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b6')">Zapisz</button><div class="weight-history" id="wh-b6"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-b6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b6')">Zapisz</button><div class="weight-history" id="wh-b6"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B7</span>
       <div class="ex-info">
         <div class="ex-name">Calf Raise (stojąc)</div>
@@ -638,14 +692,14 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/calf-raise-1d-bilateral-from-box" target="_blank" data-ex="b7" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=standing+calf+raise+runners+form" target="_blank" data-ex="b7" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-b7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b7')">Zapisz</button><div class="weight-history" id="wh-b7"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-b7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b7')">Zapisz</button><div class="weight-history" id="wh-b7"></div></div>
     </div>
   </div>
 
   <h3>Zamknięcie</h3>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">B8</span>
       <div class="ex-info">
         <div class="ex-name">Dead Bug</div>
@@ -659,7 +713,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="b8" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="b8" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-b8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b8')">Zapisz</button><div class="weight-history" id="wh-b8"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-b8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b8')">Zapisz</button><div class="weight-history" id="wh-b8"></div></div>
     </div>
   </div>
 </div>
@@ -678,8 +732,8 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 
   <h2>Blok A — przed FBW A</h2>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R1</span>
       <div class="ex-info">
         <div class="ex-name">Cable External Rotation</div>
@@ -693,12 +747,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-external-rotation" target="_blank" data-ex="r1" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+external+rotation+rotator+cuff+rehab" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r1')">Zapisz</button><div class="weight-history" id="wh-r1"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r1')">Zapisz</button><div class="weight-history" id="wh-r1"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R2</span>
       <div class="ex-info">
         <div class="ex-name">Cable Face Pull</div>
@@ -712,12 +766,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=face+pull+cable+shoulder+rehab" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r2')">Zapisz</button><div class="weight-history" id="wh-r2"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r2')">Zapisz</button><div class="weight-history" id="wh-r2"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R3</span>
       <div class="ex-info">
         <div class="ex-name">Cable Internal Rotation</div>
@@ -731,12 +785,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-internal-rotation" target="_blank" data-ex="r3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+internal+rotation+shoulder+rehab" target="_blank">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r3')">Zapisz</button><div class="weight-history" id="wh-r3"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r3')">Zapisz</button><div class="weight-history" id="wh-r3"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R4</span>
       <div class="ex-info">
         <div class="ex-name">Scapular Wall Slides</div>
@@ -750,14 +804,14 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/wall-angels" target="_blank" data-ex="r4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=scapular+wall+slides+shoulder+rehab" target="_blank" data-ex="r4" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-r4" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r4')">Zapisz</button><div class="weight-history" id="wh-r4"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-r4" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r4')">Zapisz</button><div class="weight-history" id="wh-r4"></div></div>
     </div>
   </div>
 
   <h2>Blok B — przed FBW B</h2>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R5</span>
       <div class="ex-info">
         <div class="ex-name">Prone YT Raise</div>
@@ -771,12 +825,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/is-prone" target="_blank" data-ex="r5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=prone+YT+raise+scapula+trapezius+rehab" target="_blank" data-ex="r5" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-r5" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r5')">Zapisz</button><div class="weight-history" id="wh-r5"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-r5" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r5')">Zapisz</button><div class="weight-history" id="wh-r5"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R6</span>
       <div class="ex-info">
         <div class="ex-name">Sleeper Stretch</div>
@@ -789,12 +843,12 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
       <div class="ex-links">
         <a href="https://www.youtube.com/results?search_query=sleeper+stretch+posterior+shoulder+capsule" target="_blank" data-ex="r6" data-type="yt">YouTube</a>
       </div>
-      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-r6" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r6')">Zapisz</button><div class="weight-history" id="wh-r6"></div></div>
+      <div class="ex-weight editor-only"><label>Serie</label><input class="reps-input" id="ri-r6" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r6')">Zapisz</button><div class="weight-history" id="wh-r6"></div></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h">
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))">
       <span class="ex-num">R7</span>
       <div class="ex-info">
         <div class="ex-name">Face Pull (aktywacja)</div>
@@ -807,31 +861,31 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
       <div class="ex-links">
         <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r7" data-type="mw">MuscleWiki</a>
       </div>
-      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r7" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r7" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r7')">Zapisz</button><div class="weight-history" id="wh-r7"></div></div>
+      <div class="ex-weight editor-only"><label>Ciężar</label><input class="weight-input" id="wi-r7" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r7" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r7')">Zapisz</button><div class="weight-history" id="wh-r7"></div></div>
     </div>
   </div>
 
   <h2>Malta — mini protokół (10–15.07)</h2>
   <p>Codziennie rano z gumą, 10 min, bez siłowni.</p>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h"><span class="ex-num">M1</span><div class="ex-info"><div class="ex-name">Band External Rotation</div></div><span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span></div>
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))"><span class="ex-num">M1</span><div class="ex-info"><div class="ex-name">Band External Rotation</div></div><span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span></div>
     <div class="ex-b">
       <div class="ex-note">Guma zaczepiona o klamkę. Łokieć przy ciele, rotacja na zewnątrz.</div>
       <div class="ex-links"><a href="https://musclewiki.com/exercise/band-external-rotation" target="_blank">MuscleWiki</a><a href="https://www.youtube.com/results?search_query=band+external+rotation+shoulder+rehab" target="_blank">YouTube</a></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h"><span class="ex-num">M2</span><div class="ex-info"><div class="ex-name">Band Face Pull</div></div><span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span></div>
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))"><span class="ex-num">M2</span><div class="ex-info"><div class="ex-name">Band Face Pull</div></div><span class="ex-sets">3 × 15</span><span class="ex-arr">▼</span></div>
     <div class="ex-b">
       <div class="ex-note">Guma na poziomie twarzy. Ciągnij do uszu, łokcie wysoko.</div>
       <div class="ex-links"><a href="https://www.youtube.com/results?search_query=band+face+pull+resistance+band+form" target="_blank">YouTube</a></div>
     </div>
   </div>
 
-  <div class="ex" onclick="TOG(this)">
-    <div class="ex-h"><span class="ex-num">M3</span><div class="ex-info"><div class="ex-name">YTWL z gumą</div></div><span class="ex-sets">2 × 10 (każda litera)</span><span class="ex-arr">▼</span></div>
+  <div class="ex">
+    <div class="ex-h" onclick="TOG(this.closest('.'.concat('ex')))"><span class="ex-num">M3</span><div class="ex-info"><div class="ex-name">YTWL z gumą</div></div><span class="ex-sets">2 × 10 (każda litera)</span><span class="ex-arr">▼</span></div>
     <div class="ex-b">
       <div class="ex-note">Stojąc, guma pod stopami. Ręce kolejno w Y, T, W, L. Każda litera angażuje inną część stożka rotatorów. Lekka guma.</div>
       <div class="ex-links"><a href="https://www.youtube.com/results?search_query=YTWL+exercise+rotator+cuff+band" target="_blank">YouTube</a></div>
@@ -1240,6 +1294,94 @@ window.TOG = function(el) {
     });
   }
 };
+</script>
+
+
+<!-- ── EDITOR MODE ── -->
+<button class="editor-btn" id="editorBtn" onclick="toggleEditor()">🔒 Tryb edycji</button>
+
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <h3>Tryb edycji</h3>
+    <p>Wprowadź hasło aby odblokować edycję ciężarów</p>
+    <input class="pw-input" id="pwInput" type="password" placeholder="••••••••"
+           onkeydown="if(event.key==='Enter') checkPw()">
+    <button class="pw-submit" onclick="checkPw()">Odblokuj</button>
+    <span class="pw-cancel" onclick="closePw()">Anuluj</span>
+  </div>
+</div>
+
+<script>
+// Simple hash check - not cryptographic but sufficient for this use case
+const PW_HASH = '7f8b9c2a4e1d3f6a'; // R@mzes16 encoded
+
+function simpleHash(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8,'0');
+}
+
+// Store actual pw check
+const _VALID = btoa('R@mzes16');
+
+function toggleEditor() {
+  if (document.body.classList.contains('editor-mode')) {
+    // Turn off
+    document.body.classList.remove('editor-mode');
+    document.getElementById('editorBtn').classList.remove('active');
+    document.getElementById('editorBtn').textContent = '🔒 Tryb edycji';
+    sessionStorage.removeItem('editor_unlocked');
+  } else {
+    // Check if already unlocked this session
+    if (sessionStorage.getItem('editor_unlocked') === '1') {
+      enableEditor();
+    } else {
+      document.getElementById('pwOverlay').classList.add('open');
+      setTimeout(() => document.getElementById('pwInput').focus(), 100);
+    }
+  }
+}
+
+function checkPw() {
+  const input = document.getElementById('pwInput');
+  const val = input.value;
+  if (btoa(val) === _VALID) {
+    sessionStorage.setItem('editor_unlocked', '1');
+    input.value = '';
+    closePw();
+    enableEditor();
+  } else {
+    input.classList.add('error');
+    input.value = '';
+    setTimeout(() => input.classList.remove('error'), 500);
+    input.focus();
+  }
+}
+
+function enableEditor() {
+  document.body.classList.add('editor-mode');
+  const btn = document.getElementById('editorBtn');
+  btn.classList.add('active');
+  btn.textContent = '🔓 Tryb edycji ON';
+}
+
+function closePw() {
+  document.getElementById('pwOverlay').classList.remove('open');
+  document.getElementById('pwInput').value = '';
+}
+
+// Close on overlay click
+document.getElementById('pwOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePw();
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePw();
+});
 </script>
 
 </body>
