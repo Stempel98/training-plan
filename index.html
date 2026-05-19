@@ -256,6 +256,42 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
 }
 .stbtn.show { display: flex; }
 
+
+/* ── WEIGHT TRACKER ── */
+.ex-weight {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.ex-weight label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;
+}
+.weight-input, .reps-input {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 5px; padding: 6px 8px; color: var(--white);
+  font-size: 13px; font-weight: 600; text-align: center;
+}
+.weight-input { width: 72px; }
+.reps-input   { width: 55px; }
+.weight-input:focus, .reps-input:focus { outline: none; border-color: var(--accent); }
+.weight-unit { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+.weight-save {
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 5px; padding: 6px 14px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+}
+.weight-save:active { opacity: 0.8; }
+.weight-save.saved { background: var(--green); }
+.weight-history { width: 100%; margin-top: 6px; font-size: 11px; }
+.weight-history span {
+  display: inline-block; margin-right: 6px; margin-bottom: 3px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2px 8px; color: var(--muted);
+}
+.weight-history span strong { color: var(--green); }
+
 </style>
 </head>
 <body>
@@ -320,6 +356,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-incline-bench-press" target="_blank" data-ex="a1" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=incline+dumbbell+press+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a1')">Zapisz</button><div class="weight-history" id="wh-a1"></div></div>
     </div>
   </div>
 
@@ -338,6 +375,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-press" target="_blank" data-ex="a2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a2')">Zapisz</button><div class="weight-history" id="wh-a2"></div></div>
     </div>
   </div>
 
@@ -356,6 +394,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-low-single-arm-lateral-raise" target="_blank" data-ex="a3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+lateral+raise+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a3')">Zapisz</button><div class="weight-history" id="wh-a3"></div></div>
     </div>
   </div>
 
@@ -374,6 +413,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-bench-press" target="_blank" data-ex="a4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dumbbell+flat+bench+press+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a4')">Zapisz</button><div class="weight-history" id="wh-a4"></div></div>
     </div>
   </div>
 
@@ -392,6 +432,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-rope-pushdown" target="_blank" data-ex="a5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+triceps+pushdown+rope+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a5')">Zapisz</button><div class="weight-history" id="wh-a5"></div></div>
     </div>
   </div>
 
@@ -410,6 +451,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-seated-overhead-tricep-extension" target="_blank" data-ex="a6" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=overhead+triceps+extension+dumbbell+form" target="_blank" data-ex="a6" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-a6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-a6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('a6')">Zapisz</button><div class="weight-history" id="wh-a6"></div></div>
     </div>
   </div>
 
@@ -430,6 +472,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="a7" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="a7" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-a7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a7')">Zapisz</button><div class="weight-history" id="wh-a7"></div></div>
     </div>
   </div>
 
@@ -448,6 +491,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/band-pull-apart" target="_blank" data-ex="a8" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=band+pull+apart+shoulder+health" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-a8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('a8')">Zapisz</button><div class="weight-history" id="wh-a8"></div></div>
     </div>
   </div>
 </div>
@@ -478,6 +522,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/barbell-bent-over-row" target="_blank" data-ex="b1" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=barbell+bent+over+row+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b1')">Zapisz</button><div class="weight-history" id="wh-b1"></div></div>
     </div>
   </div>
 
@@ -496,6 +541,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/machine-pulldown" target="_blank" data-ex="b2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=lat+pulldown+proper+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b2')">Zapisz</button><div class="weight-history" id="wh-b2"></div></div>
     </div>
   </div>
 
@@ -514,6 +560,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/machine-seated-cable-row" target="_blank" data-ex="b3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=seated+cable+row+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b3')">Zapisz</button><div class="weight-history" id="wh-b3"></div></div>
     </div>
   </div>
 
@@ -532,6 +579,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-curl" target="_blank" data-ex="b4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dumbbell+curl+hammer+curl+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b4" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b4" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b4')">Zapisz</button><div class="weight-history" id="wh-b4"></div></div>
     </div>
   </div>
 
@@ -552,6 +600,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-goblet-squat" target="_blank" data-ex="b5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=goblet+squat+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b5" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b5" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b5')">Zapisz</button><div class="weight-history" id="wh-b5"></div></div>
     </div>
   </div>
 
@@ -570,6 +619,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dumbbell-romanian-deadlift" target="_blank" data-ex="b6" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=romanian+deadlift+dumbbell+form" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-b6" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-b6" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('b6')">Zapisz</button><div class="weight-history" id="wh-b6"></div></div>
     </div>
   </div>
 
@@ -588,6 +638,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/calf-raise-1d-bilateral-from-box" target="_blank" data-ex="b7" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=standing+calf+raise+runners+form" target="_blank" data-ex="b7" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-b7" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b7')">Zapisz</button><div class="weight-history" id="wh-b7"></div></div>
     </div>
   </div>
 
@@ -608,6 +659,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/dead-bug" target="_blank" data-ex="b8" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+core+tutorial" target="_blank" data-ex="b8" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-b8" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('b8')">Zapisz</button><div class="weight-history" id="wh-b8"></div></div>
     </div>
   </div>
 </div>
@@ -641,6 +693,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-external-rotation" target="_blank" data-ex="r1" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+external+rotation+rotator+cuff+rehab" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r1" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r1" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r1')">Zapisz</button><div class="weight-history" id="wh-r1"></div></div>
     </div>
   </div>
 
@@ -659,6 +712,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r2" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=face+pull+cable+shoulder+rehab" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r2" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r2" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r2')">Zapisz</button><div class="weight-history" id="wh-r2"></div></div>
     </div>
   </div>
 
@@ -677,6 +731,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/cable-internal-rotation" target="_blank" data-ex="r3" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=cable+internal+rotation+shoulder+rehab" target="_blank">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r3" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r3" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r3')">Zapisz</button><div class="weight-history" id="wh-r3"></div></div>
     </div>
   </div>
 
@@ -695,6 +750,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/wall-angels" target="_blank" data-ex="r4" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=scapular+wall+slides+shoulder+rehab" target="_blank" data-ex="r4" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-r4" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r4')">Zapisz</button><div class="weight-history" id="wh-r4"></div></div>
     </div>
   </div>
 
@@ -715,6 +771,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
         <a href="https://musclewiki.com/exercise/is-prone" target="_blank" data-ex="r5" data-type="mw">MuscleWiki</a>
         <a href="https://www.youtube.com/results?search_query=prone+YT+raise+scapula+trapezius+rehab" target="_blank" data-ex="r5" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-r5" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r5')">Zapisz</button><div class="weight-history" id="wh-r5"></div></div>
     </div>
   </div>
 
@@ -732,6 +789,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
       <div class="ex-links">
         <a href="https://www.youtube.com/results?search_query=sleeper+stretch+posterior+shoulder+capsule" target="_blank" data-ex="r6" data-type="yt">YouTube</a>
       </div>
+      <div class="ex-weight"><label>Serie</label><input class="reps-input" id="ri-r6" type="number" min="1" placeholder="–"><span class="weight-unit">serie</span><button class="weight-save" onclick="saveWeight('r6')">Zapisz</button><div class="weight-history" id="wh-r6"></div></div>
     </div>
   </div>
 
@@ -749,6 +807,7 @@ p  { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
       <div class="ex-links">
         <a href="https://musclewiki.com/exercise/machine-face-pulls" target="_blank" data-ex="r7" data-type="mw">MuscleWiki</a>
       </div>
+      <div class="ex-weight"><label>Ciężar</label><input class="weight-input" id="wi-r7" type="number" step="0.5" min="0" placeholder="kg"><span class="weight-unit">kg</span><label style="margin-left:4px">Powt.</label><input class="reps-input" id="ri-r7" type="number" min="1" placeholder="–"><button class="weight-save" onclick="saveWeight('r7')">Zapisz</button><div class="weight-history" id="wh-r7"></div></div>
     </div>
   </div>
 
@@ -1092,6 +1151,96 @@ buildCal();
 </script>
 
 
+
+
+<script>
+const SB_URL = 'https://cxrkmiejbrepmtqjdmww.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4cmttaWVqYnJlcG10cWpkbXd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjE0NDcsImV4cCI6MjA5NDc5NzQ0N30.tz-RN9Hn4DSqFF7xe7vH0gCPKpb7doLedyFrB_PjLv0';
+
+async function sbFetch(path, opts) {
+  opts = opts || {};
+  const res = await fetch(SB_URL + '/rest/v1/' + path, {
+    method: opts.method || 'GET',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation'
+    },
+    body: opts.body || undefined
+  });
+  if (res.status === 204) return null;
+  return res.json();
+}
+
+async function saveWeight(exId) {
+  const wEl = document.getElementById('wi-' + exId);
+  const rEl = document.getElementById('ri-' + exId);
+  const btn = document.querySelector('[onclick="saveWeight(\'' + exId + '\')"]');
+  const weight = wEl ? (parseFloat(wEl.value) || null) : null;
+  const reps   = rEl ? (parseInt(rEl.value)   || null) : null;
+  if (!weight && !reps) return;
+  btn.textContent = '...';
+  try {
+    await sbFetch('workout_logs', {
+      method: 'POST',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ exercise_id: exId, weight_kg: weight, reps: reps, sets: 1 })
+    });
+    btn.textContent = '✓ Zapisano';
+    btn.classList.add('saved');
+    if (wEl) wEl.value = '';
+    if (rEl) rEl.value = '';
+    setTimeout(() => { btn.textContent = 'Zapisz'; btn.classList.remove('saved'); }, 2000);
+    loadHistory(exId);
+  } catch(e) {
+    btn.textContent = 'Błąd';
+    setTimeout(() => { btn.textContent = 'Zapisz'; }, 2000);
+  }
+}
+
+async function loadHistory(exId) {
+  const el = document.getElementById('wh-' + exId);
+  if (!el) return;
+  try {
+    const data = await sbFetch(
+      'workout_logs?exercise_id=eq.' + exId + '&order=logged_at.desc&limit=4'
+    );
+    if (!data || data.length === 0) {
+      el.innerHTML = '<span style="color:var(--faint)">brak historii</span>';
+      return;
+    }
+    // Pre-fill inputs with last values
+    const last = data[0];
+    const wEl = document.getElementById('wi-' + exId);
+    const rEl = document.getElementById('ri-' + exId);
+    if (wEl && last.weight_kg) wEl.placeholder = last.weight_kg + ' kg';
+    if (rEl && last.reps)      rEl.placeholder = last.reps + ' powt.';
+
+    el.innerHTML = data.map(function(r) {
+      const d = new Date(r.logged_at);
+      const ds = d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0');
+      const parts = [];
+      if (r.weight_kg) parts.push('<strong>' + r.weight_kg + 'kg</strong>');
+      if (r.reps) parts.push(r.reps + ' powt.');
+      return '<span>' + ds + ' · ' + parts.join(' · ') + '</span>';
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<span style="color:var(--faint)">—</span>';
+  }
+}
+
+// Load history when exercise card opens
+const _TOG = window.TOG;
+window.TOG = function(el) {
+  _TOG(el);
+  if (el.classList.contains('open')) {
+    el.querySelectorAll('.weight-history').forEach(function(h) {
+      loadHistory(h.id.replace('wh-', ''));
+    });
+  }
+};
+</script>
 
 </body>
 </html>
